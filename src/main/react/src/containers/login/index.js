@@ -8,6 +8,7 @@ import Icon from 'material-ui/Icon'
 import { connect } from 'react-redux'
 import { changeLoginForm, loginCommit, changeCode } from 'actions'
 import MessageShow from 'components/MessageShow'
+import { CircularProgress } from 'material-ui/Progress'
 
 
 const styles = theme => ({
@@ -41,7 +42,6 @@ class Login extends Component {
         this.inputChange = this.inputChange.bind(this)
         this.onCommit = this.onCommit.bind(this)
         this.changeCode = this.changeCode.bind(this)
-        this.msgClose = this.msgClose.bind(this)
     }
 
     componentDidMount() {
@@ -53,7 +53,7 @@ class Login extends Component {
     }
 
     inputChange(e) {
-        this.props.changeLoginForm(e.target.id, e.target.value)
+        this.props.changeLoginForm({[e.target.id]:e.target.value})
     }
 
     onCommit() {
@@ -64,16 +64,11 @@ class Login extends Component {
         this.props.changeCode()
     }
 
-    msgClose() {
-        console.log(11111)
-    }
-
-
     render() {
         const { classes, login } = this.props
 
         return (
-            <div onClick={this.msgClose}>
+            <div>
                 <Grid container className={classes.root}>
                     <Grid item xs={12} >
                         <Paper id='paper' className={classes.paper} style={{height:window.innerHeight}}>
@@ -83,7 +78,7 @@ class Login extends Component {
                                         id="name"
                                         label="用户名："
                                         className={classes.textField}
-                                        defaultValue={login.get('name')}
+                                        value={login.get('name')}
                                         margin="normal"
                                         onChange={this.inputChange}
                                     />
@@ -94,7 +89,7 @@ class Login extends Component {
                                         label="密码："
                                         className={classes.textField}
                                         type="password"
-                                        defaultValue={login.get('password')}
+                                        value={login.get('password')}
                                         autoComplete="current-password"
                                         margin="normal"
                                         onChange={this.inputChange}
@@ -105,7 +100,7 @@ class Login extends Component {
                                         id="code"
                                         label="验证码："
                                         className={classes.textField}
-                                        defaultValue={login.get('code')}
+                                        value={login.get('code')}
                                         margin="normal"
                                         onChange={this.inputChange}
                                         style={{width: 120}}
@@ -123,6 +118,7 @@ class Login extends Component {
                                     </Button>
                                 </Grid>
                                 <MessageShow msgShow={login.get('msgShow')} msg={login.get('msg')}/>
+                                <CircularProgress size={25} variant={login.get('loading')}/>
                             </Grid>
                         </Paper>
                     </Grid>

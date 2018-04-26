@@ -12,13 +12,14 @@ const initialState = Immutable.fromJS({
     disabled: false,
     msgShow: false,
     msg: '',
+    loading: 'determinate',
 })
 
 
 export default (state = initialState, action) => {
     switch (action.type) {
         case CHANGE_LOGIN_FORM:
-            return state.set(action.id, action.value)
+            return state.merge(Immutable.fromJS(action.obj))
         default:
             return state
     }

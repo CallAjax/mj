@@ -3,7 +3,7 @@ import Fade from 'material-ui/transitions/Fade'
 
 const MessageShow = (props) => {
 
-    const { classes, msg, msgShow } = props
+    const { msg, msgShow } = props
 
     return (
         <div>

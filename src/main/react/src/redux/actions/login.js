@@ -5,8 +5,8 @@ import {
 } from 'actionTypes'
 
 
-export const changeLoginForm = (id, value) => {
-    return { type: CHANGE_LOGIN_FORM, id, value}
+export const changeLoginForm = (obj) => {
+    return { type: CHANGE_LOGIN_FORM, obj}
 }
 
 export const loginCommit = () => {
