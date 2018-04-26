@@ -8,12 +8,14 @@ import cn.codesign.sys.data.model.SysErrorInfo;
 import cn.codesign.sys.data.model.SysMenu;
 import cn.codesign.sys.service.SysCacheService;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Created with codesign.
@@ -31,6 +33,8 @@ public class SysCacheServiceImpl implements SysCacheService {
     private SysMenuMapper sysMenuMapper;
     @Resource
     private SysDictMapper sysDictMapper;
+    @Resource
+    private RedisTemplate redisTemplate;
 
 
 
@@ -103,6 +107,19 @@ public class SysCacheServiceImpl implements SysCacheService {
             }
         }
         return map;
+    }
+
+    /**
+     * @User Sam
+     * @Date 2018/4/26
+     * @Time 15:44
+     * @param key:rediskey, value:redisvlaue, time:过期时间(分钟)
+     * @return
+     * @Description setString类型到redis，过期时间为time分钟
+     */
+    @Override
+    public void setStringValue(String key, String value, int time) {
+        this.redisTemplate.opsForValue().set(key, value, time, TimeUnit.MINUTES);
     }
 
 

@@ -6,7 +6,9 @@ import Immutable from 'immutable'
 const initialState = Immutable.fromJS({
     name: '',
     password: '',
-    url: '',
+    isShow: 'none',
+    code: '',
+    src: '',
 })
 
 

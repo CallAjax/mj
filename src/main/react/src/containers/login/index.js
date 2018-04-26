@@ -28,6 +28,9 @@ const styles = theme => ({
     rightIcon: {
         marginLeft: theme.spacing.unit,
     },
+    img: {
+        marginBottom: -10,
+    },
 })
 
 class Login extends Component {
@@ -62,7 +65,7 @@ class Login extends Component {
 
 
     render() {
-        const { classes, user } = this.props
+        const { classes, login } = this.props
 
         return (
             <div>
@@ -75,7 +78,7 @@ class Login extends Component {
                                         id="name"
                                         label="用户名："
                                         className={classes.textField}
-                                        defaultValue={user.get('name')}
+                                        defaultValue={login.get('name')}
                                         margin="normal"
                                         onChange={this.inputChange}
                                     />
@@ -86,26 +89,26 @@ class Login extends Component {
                                         label="密码："
                                         className={classes.textField}
                                         type="password"
-                                        defaultValue={user.get('password')}
+                                        defaultValue={login.get('password')}
                                         autoComplete="current-password"
                                         margin="normal"
                                         onChange={this.inputChange}
                                     />
                                 </Grid>
-                                <Grid item xs={12}>
+                                <Grid item xs={12} style={{display:`${login.get('isShow')}`}}>
                                     <TextField
                                         id="code"
                                         label="验证码："
                                         className={classes.textField}
-                                        type="password"
-                                        defaultValue={user.get('password')}
-                                        autoComplete="current-password"
+                                        defaultValue={login.get('code')}
                                         margin="normal"
                                         onChange={this.inputChange}
+                                        style={{width: 120}}
                                     />
+                                    <img className={classes.img} id="verifyCode" alt="验证码" src={login.src} onClick={this.changeCode} />
                                 </Grid>
                                 <Grid item xs={12}>
-                                    <img id="verifyCode" alt="验证码" onClick={this.changeCode}/>
+
                                 </Grid>
                                 <Grid item xs={12}>
                                     <Button className={classes.button} variant="raised" color="primary"
@@ -126,7 +129,7 @@ class Login extends Component {
 
 const mapStateToProps = state => {
     return {
-        user: state.get('login'),
+        login: state.get('login'),
     }
 }
 

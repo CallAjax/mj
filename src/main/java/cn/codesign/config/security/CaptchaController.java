@@ -1,12 +1,12 @@
 package cn.codesign.config.security;
 
 import cn.codesign.common.util.SysConstant;
+import cn.codesign.sys.service.SysCacheService;
 import com.google.code.kaptcha.Producer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import sun.misc.BASE64Encoder;
@@ -19,7 +19,6 @@ import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.Random;
-import java.util.concurrent.TimeUnit;
 
 /**
  * Created with codesign.
@@ -37,7 +36,7 @@ public class CaptchaController {
     private Producer captchaProducer;
 
     @Resource
-    private RedisTemplate redisTemplate;
+    private SysCacheService sysCacheServiceImpl;
 
     @Value("${request.ip}")
     private String ip;
@@ -73,7 +72,7 @@ public class CaptchaController {
             response.addHeader(SysConstant.CODE_ID, key);
 
             /**验证码入redis同步**/
-            this.redisTemplate.opsForValue().set(key, capText, 1, TimeUnit.MINUTES);
+            this.sysCacheServiceImpl.setStringValue(key, capText, 1);
 
             BASE64Encoder encoder = new BASE64Encoder();
 

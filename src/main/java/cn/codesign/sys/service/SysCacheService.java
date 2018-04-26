@@ -47,4 +47,15 @@ public interface SysCacheService {
      * @Description 获取所有字典
      */
     Map<String,Map<String,SysDict>> getDict();
+
+
+    /**
+     * @User Sam
+     * @Date 2018/4/26
+     * @Time 15:44
+     * @param key:rediskey, value:redisvlaue, time:过期时间(分钟)
+     * @return
+     * @Description setString类型到redis，过期时间为time分钟
+     */
+    void setStringValue(String key, String value, int time);
 }
