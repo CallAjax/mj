@@ -71,7 +71,7 @@ public class AuthenticationProviderImpl implements AuthenticationProvider {
 
         //redis中的验证码
         String code = null;
-        if(codeId != null) {
+        if(codeId != null && !"".equals(codeId)) {
             code = this.sysCacheServiceImpl.getStringvalue(codeId);
         }
 
@@ -90,15 +90,20 @@ public class AuthenticationProviderImpl implements AuthenticationProvider {
             }
         }
 
-//        //验证验证码
-//        if(isVerify){
-//            if(!code.equals(verifyCode)){
-//                throw new UsernameNotFoundException(SysConstant.LOGIN_VERIFY_ERROR);
-//            }
-//        }
+        //验证验证码
+        if(isVerify){
+            if(!code.equals(verifyCode)){
+                throw new UsernameNotFoundException(SysConstant.LOGIN_VERIFY_ERROR);
+            }
+        }
 
         //从数据库找到的用户
         UserDetails userDetails = userDetailsService.loadUserByUsername(username);
+        //记录失败用户名
+        if(userDetails == null) {
+            this.buLoginMapper.insertLoginInfo(username);
+            throw new UsernameNotFoundException(SysConstant.SECURITY_NAME_OR_PWD_ERROR);
+        }
 
         //比对数据库用户的密码
         if(!bCryptPasswordEncoder.matches(password.toString(),userDetails.getPassword())){

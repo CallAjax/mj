@@ -6,12 +6,32 @@ import {
 } from 'actionTypes'
 
 export function* login() {
+    let obj = {}
     const login = yield select(v => v.get('login'))
     const params = {
         uid: login.get('name'),
         pwd: login.get('password'),
+        code: login.get('code'),
+        codeId: login.get('codeId'),
     }
-    let obj = {}
+
+    if(params.uid === null || params.uid === '') {
+        obj = getError('请输入用户名...')
+        yield put({type:CHANGE_LOGIN_FORM,obj})
+        return false
+    }
+    if(params.pwd === null || params.pwd === '') {
+        obj = getError('请输入密码...')
+        yield put({type:CHANGE_LOGIN_FORM,obj})
+        return false
+    }
+    if(login.get('codeFlag') === 1){
+        if(params.code === null || params.code === ''){
+            obj = getError('请输入验证码...')
+            yield put({type:CHANGE_LOGIN_FORM,obj})
+            return false
+        }
+    }
 
     /**security接收参数需要序列化，单独使用qs转换**/
     try {

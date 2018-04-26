@@ -13,6 +13,8 @@ const initialState = Immutable.fromJS({
     msgShow: false,
     msg: '',
     loading: 'determinate',
+    codeFlag: 0,
+    codeId: '',
 })
 
 

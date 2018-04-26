@@ -1,6 +1,5 @@
 package cn.codesign.config.security;
 
-import cn.codesign.common.util.SysConstant;
 import cn.codesign.data.mapper.BuLoginMapper;
 import cn.codesign.sys.data.mapper.SecurityMapper;
 import cn.codesign.sys.data.model.SysUser;
@@ -38,9 +37,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         List<GrantedAuthority> auths = new ArrayList<GrantedAuthority>();
 		List<String> list = this.securityMapper.getAuthority(userName);
 		if(list.size() == 0){
-		    //记录失败用户名
-            this.buLoginMapper.insertLoginInfo(userName);
-		    throw new UsernameNotFoundException(SysConstant.SECURITY_NAME_OR_PWD_ERROR);
+            return null;
         }
 		for(String str : list){
             SimpleGrantedAuthority authority = new SimpleGrantedAuthority(str);
