@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.codesign.sys.data.mapper.SecurityMapper">
+
+    <resultMap id="sysUser" type="cn.codesign.sys.data.model.SysUser">
+        <id column="ID" jdbcType="VARCHAR" property="id" />
+        <result column="USER_NAME" jdbcType="VARCHAR" property="userName" />
+        <result column="USER_PWD" jdbcType="VARCHAR" property="userPwd" />
+        <result column="MOBILE" jdbcType="CHAR" property="mobile" />
+        <result column="USER_STATUS" jdbcType="INTEGER" property="userStatus" />
+        <result column="USER_LEVEL" jdbcType="INTEGER" property="userLevel" />
+        <result column="CREATE_TIME" jdbcType="TIMESTAMP" property="createTime" />
+        <result column="UPDATE_TIME" jdbcType="TIMESTAMP" property="updateTime" />
+    </resultMap>
+
+    <select id="getAuthority" resultType="string">
+        <![CDATA[
+
+			SELECT T3.AUTHORITY_ID FROM SYS_USER T1
+			JOIN SYS_USER_ROLE T2 ON T1.ID = T2.USER_ID
+			JOIN SYS_ROLE_AUTHORITY T3 ON T2.ROLE_ID = T3.ROLE_ID
+            WHERE T1.USER_NAME = #{userName}
+            GROUP BY T3.AUTHORITY_ID
+
+        ]]>
+    </select>
+
+    <select id="getUser" resultMap="sysUser">
+        <![CDATA[
+
+			SELECT * FROM SYS_USER WHERE USER_NAME = #{userName}
+
+        ]]>
+    </select>
+
+    <select id="getAllAuthority" resultType="map">
+        <![CDATA[
+
+			SELECT T1.AUTHORITY_ID,T2.URL FROM SYS_AUTHORITY_RESOURCE T1
+			JOIN SYS_RESOURCE T2 ON T1.RESOURCE_ID = T2.ID
+
+		]]>
+    </select>
+</mapper>

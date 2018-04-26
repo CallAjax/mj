@@ -1,0 +1,18 @@
+[
+  {
+    "name": "支付",
+    "items": [
+      {"to": "/pay","name": "对私支付"},
+      {"to": "/corpor","name": "对公支付"},
+      {"to": "/query","name": "订单查询"}
+    ]
+  },
+  {
+    "name": "退款撤销",
+    "items": [
+      {"to": "/refund","name": "退款"},
+      {"to": "/repeal","name": "撤销"},
+      {"to": "/refundQuery","name": "退款查询"}
+    ]
+  }
+]

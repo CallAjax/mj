@@ -1,0 +1,13 @@
+spring:
+  profiles:
+    include: dev,redis
+
+
+
+mybatis:
+  typeAliasesPackage: cn.**.mapper
+  mapperLocations: classpath:cn/**/mapper/*.xml
+
+server:
+  port: 8084
+

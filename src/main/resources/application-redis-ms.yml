@@ -1,0 +1,15 @@
+spring:
+  redis:
+    host: 172.16.100.130
+    port: 6379
+    password: test123
+    sentinel:
+      master: mymaster
+      nodes: 172.16.100.130:26379,72.16.100.131:26379,72.16.100.132:26379
+    jedis:
+      pool:
+        max-idle: 5
+        min-idle: 2
+        max-active: 20
+        max-wait: 5000
+

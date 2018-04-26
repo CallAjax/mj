@@ -1,0 +1,87 @@
+{
+  "path": "",
+  "fields": {
+    "merNo": {
+      "label": "商户号(merNo)",
+      "value": "13021035",
+      "required": true
+    },
+    "orderNo": {
+      "label": "订单号(orderNo)",
+      "value": "",
+      "required": true
+    },
+    "orderAmt": {
+      "label": "订单金额(orderAmt)",
+      "value": "",
+      "required": true
+    },
+    "orderTime": {
+      "label": "下单时间(orderTime)",
+      "value": "",
+      "required": true
+    },
+    "orderTimeOut": {
+      "label": "订单有效时间(orderTimeOut)",
+      "value": "10",
+      "required": true
+    },
+    "goodsDesc": {
+      "label": "商品描述(goodsDesc)",
+      "value": "测试订单",
+      "required": false
+    },
+    "goodsDetail": {
+      "label": "商品详情(goodsDetail)",
+      "value": "",
+      "required": false
+    },
+    "notifyUrl": {
+      "label": "后台返回地址(notifyUrl)",
+      "value": "",
+      "required": false
+    },
+    "frontNotifyUrl": {
+      "label": "前台返回地址(frontNotifyUrl)",
+      "value": "",
+      "required": false
+    },
+    "acctNo": {
+      "label": "账号(acctNo)",
+      "value": "",
+      "required": false
+    },
+    "orderType": {
+      "label": "订单类型(orderType)",
+      "value": "01",
+      "required": true
+    },
+    "oriOrderNo": {
+      "label": "原订单号(oriOrderNo)",
+      "value": "",
+      "required": true
+    },
+    "oriOrderDate": {
+      "label": "原订单交易日期(oriOrderDate)",
+      "value": "",
+      "required": true
+    }
+  },
+  "btnState": {
+    "button": false,
+    "loading": "determinate"
+  },
+  "formInfo": {
+    "url": "",
+    "dom": ""
+  },
+  "show": {
+    "isShow": false,
+    "msg": ""
+  },
+  "modal": {
+    "title": "title",
+    "isShow": false,
+    "msg": "msg"
+  }
+}
