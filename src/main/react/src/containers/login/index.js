@@ -7,6 +7,7 @@ import Button from 'material-ui/Button'
 import Icon from 'material-ui/Icon'
 import { connect } from 'react-redux'
 import { changeLoginForm, loginCommit, changeCode } from 'actions'
+import MessageShow from 'components/MessageShow'
 
 
 const styles = theme => ({
@@ -40,6 +41,7 @@ class Login extends Component {
         this.inputChange = this.inputChange.bind(this)
         this.onCommit = this.onCommit.bind(this)
         this.changeCode = this.changeCode.bind(this)
+        this.msgClose = this.msgClose.bind(this)
     }
 
     componentDidMount() {
@@ -60,7 +62,10 @@ class Login extends Component {
 
     changeCode(e) {
         this.props.changeCode()
-        //e.target.src='/service/image?d='+new Date()*1
+    }
+
+    msgClose() {
+        console.log(11111)
     }
 
 
@@ -68,7 +73,7 @@ class Login extends Component {
         const { classes, login } = this.props
 
         return (
-            <div>
+            <div onClick={this.msgClose}>
                 <Grid container className={classes.root}>
                     <Grid item xs={12} >
                         <Paper id='paper' className={classes.paper} style={{height:window.innerHeight}}>
@@ -105,18 +110,19 @@ class Login extends Component {
                                         onChange={this.inputChange}
                                         style={{width: 120}}
                                     />
-                                    <img className={classes.img} id="verifyCode" alt="验证码" src={login.src} onClick={this.changeCode} />
+                                    <img className={classes.img} alt="验证码" src={`data:image/jpeg;base64,${login.get('src')}`} onClick={this.changeCode} />
                                 </Grid>
                                 <Grid item xs={12}>
 
                                 </Grid>
                                 <Grid item xs={12}>
-                                    <Button className={classes.button} variant="raised" color="primary"
+                                    <Button className={classes.button} disabled={login.get('disabled')} variant="raised" color="primary"
                                     onClick={this.onCommit}>
                                         Send
                                         <Icon className={classes.rightIcon}>send</Icon>
                                     </Button>
                                 </Grid>
+                                <MessageShow msgShow={login.get('msgShow')} msg={login.get('msg')}/>
                             </Grid>
                         </Paper>
                     </Grid>

@@ -123,4 +123,18 @@ public class SysCacheServiceImpl implements SysCacheService {
     }
 
 
+    /**
+     * @User Sam
+     * @Date 2018/4/26
+     * @Time 15:53
+     * @param key:rediskey
+     * @return
+     * @Description 根据key获取redis中String值
+     */
+    @Override
+    public String getStringvalue(String key) {
+        return String.valueOf(this.redisTemplate.opsForValue().get(key));
+    }
+
+
 }

@@ -10,7 +10,14 @@ export function* login() {
     }
 
     /**security接收参数需要序列化，单独使用qs转换**/
-    const result = yield call(post, '/manage/login', qs.stringify(params))
+    try {
+        const result = yield call(post, '/manage/login', qs.stringify(params))
+        console.log(result)
+    } catch (e) {
+        
+    }
+
+
 }
 
 export function* changeCode() {
@@ -18,3 +25,4 @@ export function* changeCode() {
     document.getElementById('verifyCode').src = 'data:image/jpeg;base64,'+result.data
 
 }
+

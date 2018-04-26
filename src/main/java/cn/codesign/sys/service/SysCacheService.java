@@ -58,4 +58,15 @@ public interface SysCacheService {
      * @Description setString类型到redis，过期时间为time分钟
      */
     void setStringValue(String key, String value, int time);
+
+    
+    /**
+     * @User Sam
+     * @Date 2018/4/26
+     * @Time 15:53
+     * @param key:rediskey
+     * @return
+     * @Description 根据key获取redis中对应值
+     */
+    String getStringvalue(String key);
 }

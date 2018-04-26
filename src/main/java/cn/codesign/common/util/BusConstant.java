@@ -10,7 +10,6 @@ package cn.codesign.common.util;
  */
 public class BusConstant {
 
-    public static final String DICT_LOGIN = "10002000";
+    public static final String DICT_LOGIN = "10001000";
     public static final String DICT_LOGIN_MAX = "max";
-    public static final String JS_URL = "jsUrl";
 }

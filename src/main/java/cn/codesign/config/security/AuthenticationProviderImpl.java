@@ -1,7 +1,10 @@
 package cn.codesign.config.security;
 
+import cn.codesign.common.util.BusConstant;
 import cn.codesign.common.util.SysConstant;
 import cn.codesign.data.mapper.BuLoginMapper;
+import cn.codesign.data.model.BuLogin;
+import cn.codesign.sys.data.model.SysDict;
 import cn.codesign.sys.service.SysCacheService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,6 +20,7 @@ import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import java.util.Map;
 
 /**
  * Created with codesign.
@@ -59,28 +63,32 @@ public class AuthenticationProviderImpl implements AuthenticationProvider {
             throw new UsernameNotFoundException(SysConstant.LOGIN_PASSWORD_NULL);
         }
 
-        //boolean isVerify = false;
+        boolean isVerify = false;
 
         //用户提交验证码
-        //String verifyCode = httpServletRequest.getParameter("code");
+        String verifyCode = httpServletRequest.getParameter("code");
+        String codeId = httpServletRequest.getParameter("codeId");
 
-//        //系统验证码
-//        HttpSession session = httpServletRequest.getSession();
-//        String code = (String)session.getAttribute(Constants.KAPTCHA_SESSION_KEY);
+        //redis中的验证码
+        String code = null;
+        if(codeId != null) {
+            code = this.sysCacheServiceImpl.getStringvalue(codeId);
+        }
 
-//        Map<String,Map<String,SysDict>> map = sysCacheServiceImpl.getDict();
-//        int max = Integer.parseInt(map.get(BusConstant.DICT_LOGIN).get(BusConstant.DICT_LOGIN_MAX).getDictValue());
+
+        Map<String,Map<String,SysDict>> map = sysCacheServiceImpl.getDict();
+        int max = Integer.parseInt(map.get(BusConstant.DICT_LOGIN).get(BusConstant.DICT_LOGIN_MAX).getDictValue());
 
         //是否验证验证码
-//        BuLogin buLogin = this.buLoginMapper.getLogin(username);
-//        if(buLogin != null){//当天曾经登陆过
-//            if(buLogin.getLoginStatus() == 0){//上一次登陆失败
-//                if(buLogin.getLoginCount() >= max){//超出登陆次数上限
-//                    throw new UsernameNotFoundException(SysConstant.LOGIN_MAX_ERROR);
-//                }
-//                isVerify = true;
-//            }
-//        }
+        BuLogin buLogin = this.buLoginMapper.getLogin(username);
+        if(buLogin != null){//当天曾经登陆过
+            if(buLogin.getLoginStatus() == 0){//上一次登陆失败
+                if(buLogin.getLoginCount() >= max){//超出登陆次数上限
+                    throw new UsernameNotFoundException(SysConstant.LOGIN_MAX_ERROR);
+                }
+                isVerify = true;
+            }
+        }
 
 //        //验证验证码
 //        if(isVerify){

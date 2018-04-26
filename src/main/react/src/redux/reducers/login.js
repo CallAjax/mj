@@ -9,6 +9,9 @@ const initialState = Immutable.fromJS({
     isShow: 'none',
     code: '',
     src: '',
+    disabled: false,
+    msgShow: false,
+    msg: '',
 })
 
 
