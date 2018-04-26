@@ -95,7 +95,7 @@ class Login extends Component {
                                         onChange={this.inputChange}
                                     />
                                 </Grid>
-                                <Grid item xs={12} style={{display:`${login.get('isShow')}`}}>
+                                <Grid item xs={12} style={{display:`${login.get('codeShow')}`}}>
                                     <TextField
                                         id="code"
                                         label="验证码："

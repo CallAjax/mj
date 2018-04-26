@@ -6,14 +6,13 @@ import Immutable from 'immutable'
 const initialState = Immutable.fromJS({
     name: '',
     password: '',
-    isShow: 'none',
+    codeShow: 'none',
     code: '',
     src: '',
     disabled: false,
     msgShow: false,
     msg: '',
     loading: 'determinate',
-    codeFlag: 0,
     codeId: '',
 })
 

@@ -3,6 +3,7 @@ import { post } from 'commonjs/request'
 import qs from 'qs'
 import {
     CHANGE_LOGIN_FORM,
+    CHANGE_CODE,
 } from 'actionTypes'
 
 export function* login() {
@@ -25,7 +26,7 @@ export function* login() {
         yield put({type:CHANGE_LOGIN_FORM,obj})
         return false
     }
-    if(login.get('codeFlag') === 1){
+    if(login.get('codeShow') === ''){
         if(params.code === null || params.code === ''){
             obj = getError('请输入验证码...')
             yield put({type:CHANGE_LOGIN_FORM,obj})
@@ -42,19 +43,22 @@ export function* login() {
         if(result.data.resCode === 'SUCCESS') {
 
         } else {
-            obj = getError(result.data.resMsg)
+            yield put({type:CHANGE_CODE})
+            obj = getError(result.data.resMsg,{codeShow:''})
             yield put({type:CHANGE_LOGIN_FORM,obj})
         }
     } catch (e) {
-        
+        obj = getError('系统繁忙，请稍后再试...')
+        yield put({type:CHANGE_LOGIN_FORM,obj})
+        return false
     }
 
 
 }
 
 
-const getError = msg => {
-    return {
+const getError = (msg,args) => {
+    let result =  {
         name: '',
         password: '',
         code: '',
@@ -63,11 +67,12 @@ const getError = msg => {
         msg: msg,
         loading: 'determinate',
     }
+    return Object.assign(result, args)
 }
 
 export function* changeCode() {
     const result = yield call(post, '/image')
-    document.getElementById('verifyCode').src = 'data:image/jpeg;base64,'+result.data
-
+    const obj = {src:result.data}
+    yield put({type:CHANGE_LOGIN_FORM,obj})
 }
 

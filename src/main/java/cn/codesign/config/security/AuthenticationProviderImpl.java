@@ -92,6 +92,9 @@ public class AuthenticationProviderImpl implements AuthenticationProvider {
 
         //验证验证码
         if(isVerify){
+            if(code == null){
+                throw new UsernameNotFoundException(SysConstant.LOGIN_VERIFY_ERROR);
+            }
             if(!code.equals(verifyCode)){
                 throw new UsernameNotFoundException(SysConstant.LOGIN_VERIFY_ERROR);
             }
