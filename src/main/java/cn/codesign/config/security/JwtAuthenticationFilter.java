@@ -1,5 +1,6 @@
 package cn.codesign.config.security;
 
+import cn.codesign.common.util.SysConstant;
 import io.jsonwebtoken.Claims;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
@@ -17,6 +18,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created with mj.
@@ -36,22 +38,20 @@ public class JwtAuthenticationFilter extends GenericFilterBean {
 
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
+
         UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = null;
-        List<GrantedAuthority> auths = new ArrayList<GrantedAuthority>();
+        List<GrantedAuthority> auths = null;
 
         Claims claims = this.jwtUtil.getClaims((HttpServletRequest)servletRequest);
 
 
         if(claims != null) {
-            String url = ((HttpServletRequest) servletRequest).getRequestURI();
-
-            int firstQuestionMarkIndex = url.indexOf("?");
-
-            if (firstQuestionMarkIndex != -1) {
-                url = url.substring(0, firstQuestionMarkIndex);
+            auths = new ArrayList<>();
+            List<Map<String,String>> list = (List<Map<String, String>>) claims.get(SysConstant.JWT_AUTH);
+            for(Map<String,String> map : list) {
+                auths.add(new SimpleGrantedAuthority(map.get("authority")));
             }
-            SimpleGrantedAuthority authority  = new SimpleGrantedAuthority("a001");
-            auths.add(authority);
+
             usernamePasswordAuthenticationToken =
                     new UsernamePasswordAuthenticationToken(claims.getSubject(), null, auths);
         }

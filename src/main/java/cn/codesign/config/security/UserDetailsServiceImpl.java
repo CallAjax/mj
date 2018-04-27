@@ -39,8 +39,10 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 		if(list.size() == 0){
             return null;
         }
-		for(String str : list){
-            SimpleGrantedAuthority authority = new SimpleGrantedAuthority(str);
+
+        SimpleGrantedAuthority authority = null;
+        for(String str : list){
+            authority  = new SimpleGrantedAuthority(str);
             auths.add(authority);
         }
 

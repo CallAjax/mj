@@ -25,11 +25,11 @@ public class SysConstant {
 
     public static final String SECURITY_URL = "URL";
 
-    public static final String JWT_TOKEN_AUTHORIZATION = "Authorization";
+    public static final String JWT_AUTH_TOKEN = "auth-token";
 
-    public static final String JWT_TOKEN = "token";
+    public static final String JWT_AUTH = "auth";
 
-    public static final String JWT_BEARER = "Bearer";
+    public static final String JWT_AUTH_SECRET = "secret";
 
     public static final String CODE_ID = "code_id";
 

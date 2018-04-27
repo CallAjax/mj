@@ -8,7 +8,7 @@ spring:
 
 
 jwt:
-  secret: asdfsadfsadfsafsafsaf
+  secret: $2a$04$4mrJX.XBfqh4uGtXzveSKOuHGie8tlT.0..hbf5JRJ77Xtb462xj2
 
 request:
   ip: 127.0.0.1

@@ -36,15 +36,16 @@ public class AjaxAuthenticationSuccessHandler implements AuthenticationSuccessHa
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
         ResInfo resInfo = new ResInfo();
+        UserInfo userInfo = ((UserInfo) authentication.getPrincipal());
         resInfo.setResCode(SysConstant.AJAX_RESULT_SUCCESS);
         resInfo.setResInfo(authentication);
         response.setContentType(SysConstant.JSON_CONTENTTYPE);
 
-        /**jwt生产token**/
-        String token = jwtUtil.getJwtToken(((UserInfo) authentication.getPrincipal()));
-        response.addHeader(SysConstant.JWT_TOKEN_AUTHORIZATION, token);
-
         try {
+            /**jwt生产token**/
+            String token = jwtUtil.getJwtToken(userInfo);
+            response.addHeader(SysConstant.JWT_AUTH_TOKEN, token);
+
             response.getWriter().write(JacksonUtil.toJson(resInfo));
             response.getWriter().flush();
         } catch (Exception e) {

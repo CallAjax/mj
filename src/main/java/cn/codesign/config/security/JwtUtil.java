@@ -24,8 +24,8 @@ public class JwtUtil {
     private String secret;
 
     public String getJwtToken(UserInfo userInfo) {
-        return  Jwts.builder()
-                .claim("authorities", "ROLE_ADMIN,AUTH_WRITE")
+        return Jwts.builder()
+                .claim(SysConstant.JWT_AUTH, userInfo.getAuthorities())
                 .setSubject(userInfo.getUsername())
                 .setExpiration(new Date(System.currentTimeMillis() + 432_000_000))
                 .signWith(SignatureAlgorithm.HS512, secret)
@@ -34,7 +34,7 @@ public class JwtUtil {
 
 
     public Claims getClaims(HttpServletRequest httpServletRequest) {
-        String token = httpServletRequest.getHeader(SysConstant.JWT_TOKEN_AUTHORIZATION);
+        String token = httpServletRequest.getHeader(SysConstant.JWT_AUTH_TOKEN);
         Claims claims = null;
         if(token != null) {
             try {
