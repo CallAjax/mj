@@ -3,8 +3,6 @@ package cn.codesign.common.util;
 
 public class SysConstant {
 
-    public static final String AJAX_CONTENT_TYPE = "text/html;charset=UTF-8";
-
     public static final String SECURITY_AUTHORITY_ERROR = "无权访问，请联系管理员授权";
 
     public static final String SECURITY_NAME_OR_PWD_ERROR = "用户名或密码错误";
