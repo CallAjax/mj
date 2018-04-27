@@ -30,6 +30,8 @@ import java.util.Map;
 @Component
 public class JwtAuthenticationFilter extends GenericFilterBean {
 
+    private static final String FILTER_APPLIED = "APPLIED";
+
     @Resource
     private JwtUtil jwtUtil;
 
@@ -38,6 +40,13 @@ public class JwtAuthenticationFilter extends GenericFilterBean {
 
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
+        /**
+         * 解决security过滤器一个请求执行两次的问题
+         */
+        if(servletRequest.getAttribute(FILTER_APPLIED) != null) {
+            filterChain.doFilter(servletRequest,servletResponse);
+            return;
+        }
 
         UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = null;
         List<GrantedAuthority> auths = null;
@@ -45,9 +54,11 @@ public class JwtAuthenticationFilter extends GenericFilterBean {
         /**验证jwt**/
         Claims claims = this.jwtUtil.getClaims((HttpServletRequest)servletRequest);
 
+        System.out.println(((HttpServletRequest) servletRequest).getRequestURI());
 
         /**从token中拿权限**/
         if(claims != null) {
+            System.out.println(claims.getExpiration());
             auths = new ArrayList<>();
             List<Map<String,String>> list = (List<Map<String, String>>) claims.get(SysConstant.JWT_AUTH);
             for(Map<String,String> map : list) {
@@ -63,6 +74,7 @@ public class JwtAuthenticationFilter extends GenericFilterBean {
          */
         SecurityContextHolder.getContext()
                 .setAuthentication(usernamePasswordAuthenticationToken);
+        servletRequest.setAttribute(FILTER_APPLIED,true);
         filterChain.doFilter(servletRequest,servletResponse);
     }
 
