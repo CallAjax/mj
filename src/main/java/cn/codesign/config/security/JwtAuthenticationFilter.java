@@ -49,7 +49,7 @@ public class JwtAuthenticationFilter extends GenericFilterBean {
             auths = new ArrayList<>();
             List<Map<String,String>> list = (List<Map<String, String>>) claims.get(SysConstant.JWT_AUTH);
             for(Map<String,String> map : list) {
-                auths.add(new SimpleGrantedAuthority(map.get("authority")));
+                auths.add(new SimpleGrantedAuthority(map.get(SysConstant.JWT_AUTHORITY)));
             }
 
             usernamePasswordAuthenticationToken =

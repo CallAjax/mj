@@ -29,7 +29,7 @@ public class SysConstant {
 
     public static final String JWT_AUTH = "auth";
 
-    public static final String JWT_AUTH_SECRET = "secret";
+    public static final String JWT_AUTHORITY = "authority";
 
     public static final String CODE_ID = "code_id";
 

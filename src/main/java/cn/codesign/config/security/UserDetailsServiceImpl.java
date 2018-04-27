@@ -40,6 +40,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
             return null;
         }
 
+        /**authority名称会影响jwt获取对象里面的key**/
         SimpleGrantedAuthority authority = null;
         for(String str : list){
             authority  = new SimpleGrantedAuthority(str);
