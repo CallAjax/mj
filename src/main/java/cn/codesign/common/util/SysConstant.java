@@ -31,7 +31,7 @@ public class SysConstant {
 
     public static final String JWT_BEARER = "Bearer";
 
-    public static final String CODE_ID = "CodeId";
+    public static final String CODE_ID = "code_id";
 
     /**
      * 返回类型

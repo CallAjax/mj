@@ -6,6 +6,10 @@ import {
     CHANGE_CODE,
 } from 'actionTypes'
 
+/**
+ * 登陆提交
+ * @returns {IterableIterator<*>}
+ */
 export function* login() {
     let obj = {}
     const login = yield select(v => v.get('login'))
@@ -16,6 +20,8 @@ export function* login() {
         codeId: login.get('codeId'),
     }
 
+
+    /**数据校验**/
     if(params.uid === null || params.uid === '') {
         obj = getError('请输入用户名...')
         yield put({type:CHANGE_LOGIN_FORM,obj})
@@ -40,9 +46,9 @@ export function* login() {
         obj = {disabled: true, msgShow: false,loading: 'indeterminate'}
         yield put({type:CHANGE_LOGIN_FORM,obj})
         const result = yield call(post, '/manage/login', qs.stringify(params))
-        if(result.data.resCode === 'SUCCESS') {
+        if(result.data.resCode === 'SUCCESS') {//登陆成功
 
-        } else {
+        } else {//登陆失败
             yield put({type:CHANGE_CODE})
             obj = getError(result.data.resMsg,{codeShow:''})
             yield put({type:CHANGE_LOGIN_FORM,obj})
@@ -50,13 +56,34 @@ export function* login() {
     } catch (e) {
         obj = getError('系统繁忙，请稍后再试...')
         yield put({type:CHANGE_LOGIN_FORM,obj})
-        return false
     }
 
 
 }
 
 
+/**
+ * 获取验证码
+ * @returns {IterableIterator<*>}
+ */
+export function* changeCode() {
+    let obj = {}
+    try {
+        const result = yield call(post, '/image')
+        const obj = {src: result.data,codeId:result.headers.code_id}
+        yield put({type:CHANGE_LOGIN_FORM,obj})
+    } catch (e) {
+        obj = getError('系统繁忙，请稍后再试...')
+        yield put({type:CHANGE_LOGIN_FORM,obj})
+    }
+}
+
+/**
+ * 错误状态处理
+ * @param msg
+ * @param args
+ * @returns {*}
+ */
 const getError = (msg,args) => {
     let result =  {
         name: '',
@@ -68,11 +95,5 @@ const getError = (msg,args) => {
         loading: 'determinate',
     }
     return Object.assign(result, args)
-}
-
-export function* changeCode() {
-    const result = yield call(post, '/image')
-    const obj = {src:result.data}
-    yield put({type:CHANGE_LOGIN_FORM,obj})
 }
 
