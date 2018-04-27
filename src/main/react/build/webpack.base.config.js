@@ -2,6 +2,7 @@ const path = require('path')
 const webpack = require('webpack')
 const htmlPlugin = require('html-webpack-plugin')
 const extractTextPlugin = require('extract-text-webpack-plugin')
+const copyWebpackPlugin = require('copy-webpack-plugin')
 
 module.exports = config = {
     entry: {
@@ -94,6 +95,10 @@ module.exports = config = {
             filename: 'js/commonjs/[name].[chunkhash:8].js',
             miniChunks: 2,
         }),
+        new copyWebpackPlugin([{
+            from: path.resolve(__dirname, '../src/static'),
+            to: path.resolve(__dirname,'../../resources/static')
+        }]),
     ],
     watchOptions: {
         poll: 1000,
