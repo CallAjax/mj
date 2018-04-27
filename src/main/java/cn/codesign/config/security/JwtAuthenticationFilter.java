@@ -30,7 +30,7 @@ import java.util.Map;
 @Component
 public class JwtAuthenticationFilter extends GenericFilterBean {
 
-    private static final String FILTER_APPLIED = "APPLIED";
+    private static final String FILTER_APPLIED = "FILTER_APPLIED";
 
     @Resource
     private JwtUtil jwtUtil;
