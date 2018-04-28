@@ -102,14 +102,10 @@ public class AuthenticationProviderImpl implements AuthenticationProvider {
 
         //从数据库找到的用户
         UserDetails userDetails = userDetailsService.loadUserByUsername(username);
-        //记录失败用户名
-        if(userDetails == null) {
-            this.buLoginMapper.insertLoginInfo(username);
-            throw new UsernameNotFoundException(SysConstant.SECURITY_NAME_OR_PWD_ERROR);
-        }
 
         //比对数据库用户的密码
-        if(!bCryptPasswordEncoder.matches(password.toString(),userDetails.getPassword())){
+        if(userDetails == null ||
+                !bCryptPasswordEncoder.matches(password.toString(),userDetails.getPassword())){
             //记录失败用户名
             this.buLoginMapper.insertLoginInfo(username);
             throw new UsernameNotFoundException(SysConstant.SECURITY_NAME_OR_PWD_ERROR);

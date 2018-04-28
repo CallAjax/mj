@@ -15,7 +15,7 @@
     </select>
     <insert id="insertLoginInfo">
         <![CDATA[
-        INSERT INTO BU_LOGIN VALUES (#{uid},0,NOW(),1) ON DUPLICATE KEY UPDATE LOGIN_COUNT = LOGIN_COUNT + 1
+        INSERT INTO BU_LOGIN VALUES (#{uid},0,NOW(),1) ON DUPLICATE KEY UPDATE LOGIN_STATUS = 0,LOGIN_COUNT = LOGIN_COUNT + 1
         ]]>
     </insert>
     <update id="updateLoginInfo">
