@@ -3,7 +3,6 @@ import { post } from 'commonjs/request'
 import qs from 'qs'
 import {
     CHANGE_LOGIN_FORM,
-    CHANGE_CODE,
 } from 'actionTypes'
 
 /**
@@ -23,18 +22,18 @@ export function* login() {
 
     /**数据校验**/
     if(params.uid === null || params.uid === '') {
-        obj = getError('请输入用户名...')
+        obj = {msgShow: true, msg: '请输入用户名...'}
         yield put({type:CHANGE_LOGIN_FORM,obj})
         return false
     }
     if(params.pwd === null || params.pwd === '') {
-        obj = getError('请输入密码...')
+        obj = {msgShow: true, msg: '请输入密码...'}
         yield put({type:CHANGE_LOGIN_FORM,obj})
         return false
     }
     if(login.get('codeShow') === ''){
         if(params.code === null || params.code === ''){
-            obj = getError('请输入验证码...')
+            obj = {msgShow: true, msg: '请输入验证码...'}
             yield put({type:CHANGE_LOGIN_FORM,obj})
             return false
         }
@@ -49,7 +48,7 @@ export function* login() {
         if(result.data.resCode === 'SUCCESS') {//登陆成功
 
         } else {//登陆失败
-            yield put({type:CHANGE_CODE})
+            yield call(changeCode)//阻塞调用验证码刷新
             obj = getError(result.data.resMsg,{codeShow:''})
             yield put({type:CHANGE_LOGIN_FORM,obj})
         }

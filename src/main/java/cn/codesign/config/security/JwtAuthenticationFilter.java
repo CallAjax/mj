@@ -15,6 +15,7 @@ import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -54,19 +55,20 @@ public class JwtAuthenticationFilter extends GenericFilterBean {
         /**验证jwt**/
         Claims claims = this.jwtUtil.getClaims((HttpServletRequest)servletRequest);
 
-        System.out.println(((HttpServletRequest) servletRequest).getRequestURI());
-
         /**从token中拿权限**/
         if(claims != null) {
-            System.out.println(claims.getExpiration());
             auths = new ArrayList<>();
             List<Map<String,String>> list = (List<Map<String, String>>) claims.get(SysConstant.JWT_AUTH);
             for(Map<String,String> map : list) {
                 auths.add(new SimpleGrantedAuthority(map.get(SysConstant.JWT_AUTHORITY)));
             }
 
+            /**判断是否更新token**/
+            isUpdateToken(claims, (HttpServletResponse) servletResponse);
+
             usernamePasswordAuthenticationToken =
                     new UsernamePasswordAuthenticationToken(claims.getSubject(), null, auths);
+
         }
 
         /**
@@ -79,7 +81,17 @@ public class JwtAuthenticationFilter extends GenericFilterBean {
     }
 
 
+    /**
+     * @User Sam
+     * @Date 2018/4/27
+     * @Time 17:26
+     * @param
+     * @return
+     * @Description 判断是否更新token
+     */
+    private void isUpdateToken(Claims claims, HttpServletResponse httpServletResponse) {
 
+    }
 
 
 }
