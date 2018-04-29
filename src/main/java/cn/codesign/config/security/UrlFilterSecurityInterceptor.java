@@ -23,8 +23,6 @@ public class UrlFilterSecurityInterceptor  extends AbstractSecurityInterceptor i
 
     private FilterInvocationSecurityMetadataSource securityMetadataSource;
 
-
-
     @Resource
     public void setAccessDecisionManager(AccessDecisionManagerImpl accessDecisionManagerImpl) {
         super.setAccessDecisionManager(accessDecisionManagerImpl);
