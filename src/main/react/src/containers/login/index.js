@@ -1,5 +1,4 @@
 import React,{Component} from 'react'
-import { call } from 'redux-saga/effects'
 import { withStyles } from 'material-ui/styles'
 import Grid from 'material-ui/Grid'
 import Paper from 'material-ui/Paper'
@@ -10,7 +9,6 @@ import { connect } from 'react-redux'
 import { changeLoginForm, loginCommit, changeCode } from 'actions'
 import MessageShow from 'components/MessageShow'
 import { CircularProgress } from 'material-ui/Progress'
-import {throttle} from 'commonjs/common'
 
 
 
