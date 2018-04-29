@@ -31,6 +31,10 @@ public class SysConstant {
 
     public static final String CODE_ID = "code_id";
 
+    public static final int USER_STATUS_PROHIBITED = 0;
+
+    public static final String USER_PROHIBITED = "该用户禁止登陆";
+
     /**
      * 返回类型
      */

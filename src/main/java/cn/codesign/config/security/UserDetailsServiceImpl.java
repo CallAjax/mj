@@ -48,7 +48,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         }
 
 		SysUser sysUser = this.securityMapper.getUser(userName);
-		return new UserInfo(userName,sysUser.getUserPwd(),auths,null);
+		return new UserInfo(userName,sysUser.getUserPwd(),auths,null,sysUser);
 	}
 
 

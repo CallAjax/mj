@@ -103,12 +103,19 @@ public class AuthenticationProviderImpl implements AuthenticationProvider {
         //从数据库找到的用户
         UserDetails userDetails = userDetailsService.loadUserByUsername(username);
 
+
+
         //比对数据库用户的密码
         if(userDetails == null ||
                 !bCryptPasswordEncoder.matches(password.toString(),userDetails.getPassword())){
             //记录失败用户名
             this.buLoginMapper.insertLoginInfo(username);
             throw new UsernameNotFoundException(SysConstant.SECURITY_NAME_OR_PWD_ERROR);
+        }
+
+        //用户被禁止登陆
+        if(((UserInfo)userDetails).getSysUser().getUserStatus() == SysConstant.USER_STATUS_PROHIBITED) {
+            throw new UsernameNotFoundException(SysConstant.USER_PROHIBITED);
         }
 
         //更新登陆信息表
