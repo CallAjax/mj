@@ -3,7 +3,9 @@ package cn.codesign.sys.service;
 import cn.codesign.sys.data.model.SysDict;
 import cn.codesign.sys.data.model.SysErrorInfo;
 import cn.codesign.sys.data.model.SysMenu;
+import org.springframework.security.access.ConfigAttribute;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
@@ -56,7 +58,7 @@ public interface SysCacheService {
      * @return
      * @Description 获取所有权限
      */
-    List<Map<String,String>> getAllAuthority();
+    Map<String, Collection<ConfigAttribute>> getAllAuthority();
 
 
     /**

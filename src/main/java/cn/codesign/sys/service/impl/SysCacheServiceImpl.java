@@ -1,5 +1,6 @@
 package cn.codesign.sys.service.impl;
 
+import cn.codesign.common.util.SysConstant;
 import cn.codesign.sys.data.mapper.SecurityMapper;
 import cn.codesign.sys.data.mapper.SysDictMapper;
 import cn.codesign.sys.data.mapper.SysErrorInfoMapper;
@@ -10,12 +11,12 @@ import cn.codesign.sys.data.model.SysMenu;
 import cn.codesign.sys.service.SysCacheService;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.security.access.ConfigAttribute;
+import org.springframework.security.access.SecurityConfig;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -124,8 +125,22 @@ public class SysCacheServiceImpl implements SysCacheService {
      */
     @Override
     @Cacheable(value = "Authority")
-    public List<Map<String, String>> getAllAuthority() {
-        return this.securityMapper.getAllAuthority();
+    public Map<String, Collection<ConfigAttribute>> getAllAuthority() {
+        Map<String, Collection<ConfigAttribute>> resourceMap = new HashMap<>();
+        List<Map<String,String>> resList = this.securityMapper.getAllAuthority();
+        for(Map<String,String> map : resList){
+            ConfigAttribute ca = new SecurityConfig(map.get(SysConstant.SECURITY_AUTHORITY_ID));
+            if (resourceMap.containsKey(map.get(SysConstant.SECURITY_URL))) {
+                Collection<ConfigAttribute> value = resourceMap.get(map.get(SysConstant.SECURITY_URL));
+                value.add(ca);
+                resourceMap.put(map.get(SysConstant.SECURITY_URL), value);
+            } else {
+                Collection<ConfigAttribute> atts = new ArrayList<ConfigAttribute>();
+                atts.add(ca);
+                resourceMap.put(map.get(SysConstant.SECURITY_URL), atts);
+            }
+        }
+        return resourceMap;
     }
 
     /**
