@@ -4,10 +4,11 @@ import cn.codesign.common.util.SysConstant;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
 
 /**
@@ -20,11 +21,14 @@ import java.util.Date;
 @Component
 public class JwtUtil {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(JwtUtil.class);
+
     @Value("${jwt.secret}")
     private String secret;
 
     public String getJwtToken(UserInfo userInfo) {
         return Jwts.builder()
+                .setHeader(SysConstant.JWT_MAP)
                 .claim(SysConstant.JWT_AUTH, userInfo.getAuthorities())
                 .setSubject(userInfo.getUsername())
                 .setExpiration(new Date(System.currentTimeMillis() + 14400000))
@@ -33,16 +37,16 @@ public class JwtUtil {
     }
 
 
-    public Claims getClaims(HttpServletRequest httpServletRequest) {
-        String token = httpServletRequest.getHeader(SysConstant.JWT_AUTH_TOKEN);
+    public Claims getClaims(String token) {
         Claims claims = null;
-        if(token != null) {
+        if(token != null && token.startsWith(SysConstant.JWT_BEARER)) {
             try {
                 claims = Jwts.parser()
                         .setSigningKey(secret)
-                        .parseClaimsJws(token)
+                        .parseClaimsJws(token.substring(7))
                         .getBody();
             } catch (Exception e) {
+                LOGGER.warn(e.getMessage(), e);
                 return null;
             }
         }

@@ -49,11 +49,18 @@ public class JwtAuthenticationFilter extends GenericFilterBean {
             return;
         }
 
+
+        /**验证jwt**/
+        Claims claims = null;
+        String token = ((HttpServletRequest) servletRequest).getHeader(SysConstant.JWT_AUTHORIZATION_TOKEN);
+        if(token != null) {
+            claims = this.jwtUtil.getClaims(token);
+        }
+
         UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = null;
         List<GrantedAuthority> auths = null;
 
-        /**验证jwt**/
-        Claims claims = this.jwtUtil.getClaims((HttpServletRequest)servletRequest);
+
 
         /**从token中拿权限**/
         if(claims != null) {
@@ -68,6 +75,8 @@ public class JwtAuthenticationFilter extends GenericFilterBean {
 
             usernamePasswordAuthenticationToken =
                     new UsernamePasswordAuthenticationToken(claims.getSubject(), null, auths);
+
+        } else {
 
         }
 

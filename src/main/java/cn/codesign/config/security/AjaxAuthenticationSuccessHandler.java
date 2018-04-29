@@ -44,7 +44,7 @@ public class AjaxAuthenticationSuccessHandler implements AuthenticationSuccessHa
         try {
             /**jwt生产token**/
             String token = jwtUtil.getJwtToken(userInfo);
-            response.addHeader(SysConstant.JWT_AUTH_TOKEN, token);
+            response.addHeader(SysConstant.JWT_ACCESS_TOKEN, token);
 
             response.getWriter().write(JacksonUtil.toJson(resInfo));
             response.getWriter().flush();

@@ -1,6 +1,9 @@
 package cn.codesign.common.util;
 
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class SysConstant {
 
     public static final String SECURITY_AUTHORITY_ERROR = "无权访问，请联系管理员授权";
@@ -23,7 +26,19 @@ public class SysConstant {
 
     public static final String SECURITY_URL = "URL";
 
-    public static final String JWT_AUTH_TOKEN = "auth_token";
+    public static final String JWT_AUTHORIZATION_TOKEN = "Authorization";
+
+    public static final String JWT_ACCESS_TOKEN = "access_token";
+
+    public static final String JWT_ALG = "alg";
+
+    public static final String JWT_TYP = "typ";
+
+    public static final String JWT_HS512 = "HS512";
+
+    public static final String JWT = "JWT";
+
+    public static final String JWT_BEARER = "Bearer ";
 
     public static final String JWT_AUTH = "auth";
 
@@ -34,6 +49,13 @@ public class SysConstant {
     public static final int USER_STATUS_PROHIBITED = 0;
 
     public static final String USER_PROHIBITED = "该用户禁止登陆";
+
+    public static final Map<String, Object> JWT_MAP = new HashMap<>();
+
+    static {
+        JWT_MAP.put(JWT_ALG, JWT_HS512);
+        JWT_MAP.put(JWT_TYP, JWT);
+    }
 
     /**
      * 返回类型

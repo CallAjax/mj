@@ -1,6 +1,5 @@
 package cn.codesign.config.security;
 
-import org.springframework.security.access.AccessDecisionManager;
 import org.springframework.security.access.SecurityMetadataSource;
 import org.springframework.security.access.intercept.AbstractSecurityInterceptor;
 import org.springframework.security.access.intercept.InterceptorStatusToken;
@@ -27,8 +26,8 @@ public class UrlFilterSecurityInterceptor  extends AbstractSecurityInterceptor i
 
 
     @Resource
-    public void setAccessDecisionManager(AccessDecisionManager accessDecisionManager) {
-        super.setAccessDecisionManager(accessDecisionManager);
+    public void setAccessDecisionManager(AccessDecisionManagerImpl accessDecisionManagerImpl) {
+        super.setAccessDecisionManager(accessDecisionManagerImpl);
     }
 
     @Resource
