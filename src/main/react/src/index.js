@@ -5,13 +5,14 @@ import { Provider } from 'react-redux'
 import store from './redux/reducers'
 import Login from 'containers/login'
 import Error from 'components/Error'
+import Home from 'containers/home'
 
 render(
     <Provider store={store}>
         <BrowserRouter>
             <Switch>
                 <Route exact path="/404" component={Error} />
-                <Route path="/" component={Login} />
+                <Route exact path="/" component={Login} />
             </Switch>
         </BrowserRouter>
     </Provider>

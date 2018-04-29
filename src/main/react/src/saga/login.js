@@ -4,6 +4,8 @@ import qs from 'qs'
 import {
     CHANGE_LOGIN_FORM,
 } from 'actionTypes'
+import localforage from 'localforage'
+import Immutable from 'immutable'
 
 /**
  * 登陆提交
@@ -43,9 +45,13 @@ export function* login() {
     try {
         //提交按钮不可用
         obj = {disabled: true, msgShow: false,loading: 'indeterminate'}
+
         yield put({type:CHANGE_LOGIN_FORM,obj})
         const result = yield call(post, '/manage/login', qs.stringify(params))
+
+        /**判断登陆结果**/
         if(result.data.resCode === 'SUCCESS') {//登陆成功
+            //本地存储保存token
 
         } else {//登陆失败
             yield call(changeCode)//阻塞调用验证码刷新
