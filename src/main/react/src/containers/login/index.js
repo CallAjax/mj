@@ -1,4 +1,5 @@
 import React,{Component} from 'react'
+import { call } from 'redux-saga/effects'
 import { withStyles } from 'material-ui/styles'
 import Grid from 'material-ui/Grid'
 import Paper from 'material-ui/Paper'
@@ -9,6 +10,9 @@ import { connect } from 'react-redux'
 import { changeLoginForm, loginCommit, changeCode } from 'actions'
 import MessageShow from 'components/MessageShow'
 import { CircularProgress } from 'material-ui/Progress'
+import {throttle} from 'commonjs/common'
+
+
 
 
 const styles = theme => ({
@@ -46,11 +50,16 @@ class Login extends Component {
     }
 
     componentDidMount() {
+        //window.addEventListener('resize',()=>throttle(this.onResize,600))
         let resize = null
         window.onresize = () => {
             resize = resize ? null : setTimeout(() =>
                 document.getElementById('paper').style.height = window.innerHeight + 'px',0)
         }
+    }
+
+    componentWillUnmount() {
+        //window.removeEventListener('resize',()=>throttle(this.onResize,600))
     }
 
     inputChange(e) {
@@ -70,6 +79,10 @@ class Login extends Component {
             this.onCommit()
         }
     }
+
+    // onResize() {
+    //     document.getElementById('paper').style.height = window.innerHeight + 'px'
+    // }
 
     render() {
         const { classes, login } = this.props

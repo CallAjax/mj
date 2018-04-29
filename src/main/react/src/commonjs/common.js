@@ -11,3 +11,13 @@ export const isPc = () => {
         return false
     }
 }
+
+/**
+ * 节流
+ * @param method
+ * @param time
+ */
+export const throttle = (method, time) => {
+    clearTimeout(method.timer)
+    method.timer = setTimeout(() => method(),time)
+}
