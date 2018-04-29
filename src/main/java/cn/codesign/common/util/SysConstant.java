@@ -44,6 +44,10 @@ public class SysConstant {
 
     public static final String JWT_AUTHORITY = "authority";
 
+    public static final String JWT_PARAM_CODE = "code";
+
+    public static final String JWT_PARAM_CODE_ID = "codeId";
+
     public static final String CODE_ID = "code_id";
 
     public static final int USER_STATUS_PROHIBITED = 0;

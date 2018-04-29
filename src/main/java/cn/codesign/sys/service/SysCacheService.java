@@ -48,6 +48,16 @@ public interface SysCacheService {
      */
     Map<String,Map<String,SysDict>> getDict();
 
+    /**
+     * @User Sam
+     * @Date 2018/4/30
+     * @Time 01:49
+     * @param
+     * @return
+     * @Description 获取所有权限
+     */
+    List<Map<String,String>> getAllAuthority();
+
 
     /**
      * @User Sam

@@ -1,7 +1,7 @@
 package cn.codesign.config.security;
 
 import cn.codesign.common.util.SysConstant;
-import cn.codesign.sys.data.mapper.SecurityMapper;
+import cn.codesign.sys.service.SysCacheService;
 import org.springframework.security.access.ConfigAttribute;
 import org.springframework.security.access.SecurityConfig;
 import org.springframework.security.web.FilterInvocation;
@@ -23,13 +23,13 @@ public class FilterInvocationSecurityMetadataSourceImpl implements
         FilterInvocationSecurityMetadataSource {
 
     @Resource
-    private SecurityMapper securityMapper;
+    private SysCacheService SysCacheServiceImpl;
 
     private static Map<String, Collection<ConfigAttribute>> resourceMap = null;
 
     private void loadResourceDefine(){
-        resourceMap = new HashMap<String, Collection<ConfigAttribute>>();
-        List<Map<String,String>> resList = this.securityMapper.getAllAuthority();
+        resourceMap = new HashMap<>();
+        List<Map<String,String>> resList = this.SysCacheServiceImpl.getAllAuthority();
         for(Map<String,String> map : resList){
             ConfigAttribute ca = new SecurityConfig(map.get(SysConstant.SECURITY_AUTHORITY_ID));
             if (resourceMap.containsKey(map.get(SysConstant.SECURITY_URL))) {

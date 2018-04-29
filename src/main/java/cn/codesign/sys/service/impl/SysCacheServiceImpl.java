@@ -1,5 +1,6 @@
 package cn.codesign.sys.service.impl;
 
+import cn.codesign.sys.data.mapper.SecurityMapper;
 import cn.codesign.sys.data.mapper.SysDictMapper;
 import cn.codesign.sys.data.mapper.SysErrorInfoMapper;
 import cn.codesign.sys.data.mapper.SysMenuMapper;
@@ -35,6 +36,8 @@ public class SysCacheServiceImpl implements SysCacheService {
     private SysDictMapper sysDictMapper;
     @Resource
     private RedisTemplate redisTemplate;
+    @Resource
+    private SecurityMapper securityMapper;
 
 
 
@@ -107,6 +110,22 @@ public class SysCacheServiceImpl implements SysCacheService {
             }
         }
         return map;
+    }
+
+
+
+    /**
+     * @User Sam
+     * @Date 2018/4/30
+     * @Time 01:49
+     * @param
+     * @return
+     * @Description 获取所有权限
+     */
+    @Override
+    @Cacheable(value = "Authority")
+    public List<Map<String, String>> getAllAuthority() {
+        return this.securityMapper.getAllAuthority();
     }
 
     /**

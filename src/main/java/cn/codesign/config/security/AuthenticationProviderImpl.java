@@ -66,8 +66,8 @@ public class AuthenticationProviderImpl implements AuthenticationProvider {
         boolean isVerify = false;
 
         //用户提交验证码
-        String verifyCode = httpServletRequest.getParameter("code");
-        String codeId = httpServletRequest.getParameter("codeId");
+        String verifyCode = httpServletRequest.getParameter(SysConstant.JWT_PARAM_CODE);
+        String codeId = httpServletRequest.getParameter(SysConstant.JWT_PARAM_CODE_ID);
 
         //redis中的验证码
         String code = null;
