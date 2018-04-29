@@ -16,7 +16,7 @@ import java.util.Date;
  * User: Sam
  * Date: 2018/4/24
  * Time: 16:32
- * Description:
+ * Description: jwt工具类
  */
 @Component
 public class JwtUtil {
@@ -26,17 +26,30 @@ public class JwtUtil {
     @Value("${jwt.secret}")
     private String secret;
 
+    @Value("${jwt.time}")
+    private long time;
+
+    /**
+     * 生成jwttoken
+     * @param userInfo
+     * @return
+     */
     public String getJwtToken(UserInfo userInfo) {
         return Jwts.builder()
                 .setHeader(SysConstant.JWT_MAP)
                 .claim(SysConstant.JWT_AUTH, userInfo.getAuthorities())
                 .setSubject(userInfo.getUsername())
-                .setExpiration(new Date(System.currentTimeMillis() + 14400000))
+                .setExpiration(new Date(System.currentTimeMillis() + time))
                 .signWith(SignatureAlgorithm.HS512, secret)
                 .compact();
     }
 
 
+    /**
+     * 验证token
+     * @param token
+     * @return
+     */
     public Claims getClaims(String token) {
         Claims claims = null;
         if(token != null && token.startsWith(SysConstant.JWT_BEARER)) {
