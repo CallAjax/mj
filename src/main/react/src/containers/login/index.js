@@ -42,6 +42,7 @@ class Login extends Component {
         this.inputChange = this.inputChange.bind(this)
         this.onCommit = this.onCommit.bind(this)
         this.changeCode = this.changeCode.bind(this)
+        this.onKeyDown = this.onKeyDown.bind(this)
     }
 
     componentDidMount() {
@@ -64,12 +65,18 @@ class Login extends Component {
         this.props.changeCode()
     }
 
+    onKeyDown(e) {
+        if(e.keyCode === 13) {
+            this.onCommit()
+        }
+    }
+
     render() {
         const { classes, login } = this.props
 
         return (
-            <div>
-                <Grid container className={classes.root}>
+            <div onKeyUp={this.onKeyDown}>
+                <Grid container className={classes.root} >
                     <Grid item xs={12} >
                         <Paper id='paper' className={classes.paper} style={{height:window.innerHeight}}>
                             <Grid item xs={12} style={{paddingTop:'20%'}}>
