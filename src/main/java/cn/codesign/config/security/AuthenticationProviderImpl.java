@@ -122,7 +122,7 @@ public class AuthenticationProviderImpl implements AuthenticationProvider {
         this.buLoginMapper.updateLoginInfo(username);
 
         //授权
-        return new UsernamePasswordAuthenticationToken(userDetails, password,userDetails.getAuthorities());
+        return new UsernamePasswordAuthenticationToken(userDetails, password, userDetails.getAuthorities());
     }
 
     @Override

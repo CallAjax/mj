@@ -4,10 +4,8 @@ import cn.codesign.common.util.SysConstant;
 import cn.codesign.sys.data.mapper.SecurityMapper;
 import cn.codesign.sys.data.mapper.SysDictMapper;
 import cn.codesign.sys.data.mapper.SysErrorInfoMapper;
-import cn.codesign.sys.data.mapper.SysMenuMapper;
 import cn.codesign.sys.data.model.SysDict;
 import cn.codesign.sys.data.model.SysErrorInfo;
-import cn.codesign.sys.data.model.SysMenu;
 import cn.codesign.sys.service.SysCacheService;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -31,8 +29,6 @@ public class SysCacheServiceImpl implements SysCacheService {
 
     @Resource
     private SysErrorInfoMapper sysErrorInfoMapper;
-    @Resource
-    private SysMenuMapper sysMenuMapper;
     @Resource
     private SysDictMapper sysDictMapper;
     @Resource
@@ -63,21 +59,6 @@ public class SysCacheServiceImpl implements SysCacheService {
         }
         return map;
     }
-
-    /**
-     * @User Sam
-     * @Date 2017/6/20
-     * @Time 09:22
-     * @param
-     * @return
-     * @Description 获取菜单
-     */
-    @Override
-    @Cacheable(value = "sysMenu")
-    public List<SysMenu> getMenu() {
-        return this.sysMenuMapper.getMenu();
-    }
-
 
     /**
      * @User Sam

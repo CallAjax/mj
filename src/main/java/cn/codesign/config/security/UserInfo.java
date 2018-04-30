@@ -1,28 +1,26 @@
 package cn.codesign.config.security;
 
+import cn.codesign.sys.data.model.SysAuthority;
 import cn.codesign.sys.data.model.SysUser;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 
 import java.util.Collection;
-import java.util.LinkedHashMap;
 import java.util.List;
 
 public class UserInfo extends User {
 
 	private static final long serialVersionUID = 6577957544860688000L;
-
-	private LinkedHashMap<String,LinkedHashMap<String, List<String>>> menuMap;
-
+	private List<SysAuthority> sysAuthority;
 	private SysUser sysUser;
 	
 	
 	
 	public UserInfo(String username, String password,
-                    Collection<? extends GrantedAuthority> authorities, LinkedHashMap<String,LinkedHashMap<String, List<String>>> menuMap, SysUser sysUser) {
+                    Collection<? extends GrantedAuthority> authorities, List<SysAuthority> sysAuthority, SysUser sysUser) {
 		super(username, password, authorities);
-		this.menuMap = menuMap;
 		this.sysUser = sysUser;
+		this.sysAuthority = sysAuthority;
 	}
 
     public static long getSerialVersionUID() {
@@ -37,12 +35,11 @@ public class UserInfo extends User {
         this.sysUser = sysUser;
     }
 
-    public LinkedHashMap<String, LinkedHashMap<String, List<String>>> getMenuMap() {
-		return menuMap;
-	}
-	public void setMenuMap(
-			LinkedHashMap<String, LinkedHashMap<String, List<String>>> menuMap) {
-		this.menuMap = menuMap;
-	}
+    public List<SysAuthority> getSysAuthority() {
+        return sysAuthority;
+    }
 
+    public void setSysAuthority(List<SysAuthority> sysAuthority) {
+        this.sysAuthority = sysAuthority;
+    }
 }

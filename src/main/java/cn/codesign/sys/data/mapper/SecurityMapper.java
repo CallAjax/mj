@@ -1,5 +1,6 @@
 package cn.codesign.sys.data.mapper;
 
+import cn.codesign.sys.data.model.SysAuthority;
 import cn.codesign.sys.data.model.SysUser;
 
 import java.util.List;
@@ -22,7 +23,7 @@ public interface SecurityMapper {
      * @return 权限集合
      * @Description 获取指定给用户的权限集合
      */
-    List<String> getAuthority(String userName);
+    List<SysAuthority> getAuthority(String userName);
 
 
     /**
