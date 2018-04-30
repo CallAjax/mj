@@ -38,7 +38,7 @@ public class AjaxAuthenticationSuccessHandler implements AuthenticationSuccessHa
         ResInfo resInfo = new ResInfo();
         UserInfo userInfo = ((UserInfo) authentication.getPrincipal());
         resInfo.setResCode(SysConstant.AJAX_RESULT_SUCCESS);
-        resInfo.setResInfo(authentication);
+        resInfo.setResInfo(userInfo.getSysAuthority());
         response.setContentType(SysConstant.JSON_CONTENTTYPE);
 
         try {
