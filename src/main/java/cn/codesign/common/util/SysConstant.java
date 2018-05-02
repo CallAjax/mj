@@ -32,6 +32,8 @@ public class SysConstant {
 
     public static final String JWT_ROUTES = "access_routes";
 
+    public static final String JWT_MENU = "access_menu";
+
     public static final String JWT_ALG = "alg";
 
     public static final String JWT_TYP = "typ";

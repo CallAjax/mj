@@ -54,6 +54,7 @@ export function* login() {
             //本地存储保存token
             console.log(result.headers['access_token'])
             console.log(JSON.parse(decodeURIComponent(result.headers['access_routes'])))
+            console.log(JSON.parse(decodeURIComponent(result.headers['access_menu'])))
         } else {//登陆失败
             yield call(changeCode)//阻塞调用验证码刷新
             obj = getError(result.data.resMsg,{codeShow:''})
