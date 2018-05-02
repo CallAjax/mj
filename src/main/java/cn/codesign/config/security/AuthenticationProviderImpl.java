@@ -131,7 +131,7 @@ public class AuthenticationProviderImpl implements AuthenticationProvider {
 
         //写token
         try {
-            this.sysServiceImpl.resToken(this.httpServletResponse,userDetails.getUsername(),(UserInfo)userDetails);
+            this.sysServiceImpl.resToken(this.httpServletResponse,(UserInfo)userDetails);
         } catch (Exception e) {
             LOGGER.error(e.getMessage(), e);
         }

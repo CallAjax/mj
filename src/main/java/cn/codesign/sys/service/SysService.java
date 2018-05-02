@@ -16,8 +16,7 @@ public interface SysService {
     /**
      * 生成token
      * @param httpServletResponse
-     * @param name
      * @param userInfo
      */
-    void resToken(HttpServletResponse httpServletResponse, String name, UserInfo userInfo) throws Exception;
+    void resToken(HttpServletResponse httpServletResponse, UserInfo userInfo) throws Exception;
 }

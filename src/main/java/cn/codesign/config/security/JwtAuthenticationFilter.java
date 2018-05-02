@@ -1,11 +1,16 @@
 package cn.codesign.config.security;
 
 import cn.codesign.common.util.SysConstant;
+import cn.codesign.sys.service.SysService;
 import io.jsonwebtoken.Claims;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.GenericFilterBean;
 
@@ -31,12 +36,21 @@ import java.util.Map;
 @Component
 public class JwtAuthenticationFilter extends GenericFilterBean {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(JwtAuthenticationFilter.class);
+
     private static final String FILTER_APPLIED = "FILTER_APPLIED";
+
+    @Value("${jwt.update}")
+    private long time;
 
     @Resource
     private JwtUtil jwtUtil;
 
+    @Resource
+    private UserDetailsService userDetailsService;
 
+    @Resource
+    private SysService sysServiceImpl;
 
 
     @Override
@@ -71,7 +85,11 @@ public class JwtAuthenticationFilter extends GenericFilterBean {
             }
 
             /**判断是否更新token**/
-            isUpdateToken(claims, (HttpServletResponse) servletResponse);
+            try {
+                isUpdateToken(claims, (HttpServletResponse) servletResponse);
+            } catch (Exception e) {
+                LOGGER.error(e.getMessage(), e);
+            }
 
             usernamePasswordAuthenticationToken =
                     new UsernamePasswordAuthenticationToken(claims.getSubject(), null, auths);
@@ -96,8 +114,21 @@ public class JwtAuthenticationFilter extends GenericFilterBean {
      * @return
      * @Description 判断是否更新token
      */
-    private void isUpdateToken(Claims claims, HttpServletResponse httpServletResponse) {
+    private void isUpdateToken(Claims claims, HttpServletResponse httpServletResponse) throws Exception {
+        UserInfo userInfo = null;
+        long t = claims.getExpiration().getTime() - System.currentTimeMillis();
+        if (t < this.time) {//需要更新token
+            userInfo = (UserInfo) this.userDetailsService.loadUserByUsername(claims.getSubject());
 
+            //检查用户状态
+            if(userInfo.getSysUser().getUserStatus() == SysConstant.USER_STATUS_PROHIBITED) {
+                return;
+            }
+
+            //更新token
+            this.sysServiceImpl.resToken(httpServletResponse, userInfo);
+
+        }
     }
 
 

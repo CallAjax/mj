@@ -33,12 +33,11 @@ public class SysServiceImpl implements SysService {
     /**
      * 生成token
      * @param httpServletResponse
-     * @param name
      * @param userInfo
      * @throws Exception
      */
     @Override
-    public void resToken(HttpServletResponse httpServletResponse,String name, UserInfo userInfo) throws Exception {
+    public void resToken(HttpServletResponse httpServletResponse, UserInfo userInfo) throws Exception {
         List<SysAuthority> list = userInfo.getSysAuthority();
         List<SysAuthority> l1 = list.stream().filter(v -> v.getAuthorityLevel() == 1).collect(Collectors.toList());
         List<SysAuthority> l2 = list.stream().filter(v -> v.getAuthorityLevel() == 2).collect(Collectors.toList());
@@ -56,7 +55,7 @@ public class SysServiceImpl implements SysService {
 
         httpServletResponse.addHeader(
                 SysConstant.JWT_ACCESS_TOKEN,
-                this.jwtUtil.getJwtToken(name,userInfo.getAuthorities())
+                this.jwtUtil.getJwtToken(userInfo.getUsername(),userInfo.getAuthorities())
         );
         /**路由页面以及对应子路由**/
         httpServletResponse.addHeader(
