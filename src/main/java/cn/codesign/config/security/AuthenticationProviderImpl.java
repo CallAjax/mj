@@ -1,6 +1,7 @@
 package cn.codesign.config.security;
 
 import cn.codesign.common.util.BusConstant;
+import cn.codesign.common.util.JacksonUtil;
 import cn.codesign.common.util.SysConstant;
 import cn.codesign.data.mapper.BuLoginMapper;
 import cn.codesign.data.model.BuLogin;
@@ -20,6 +21,8 @@ import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.net.URLEncoder;
 import java.util.Map;
 
 /**
@@ -32,13 +35,16 @@ import java.util.Map;
 @Component
 public class AuthenticationProviderImpl implements AuthenticationProvider {
 
-    private static Logger logger = LoggerFactory.getLogger(AuthenticationProviderImpl.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(AuthenticationProviderImpl.class);
 
     @Resource
     private  UserDetailsService userDetailsService;
 
     @Resource
     private HttpServletRequest httpServletRequest;
+
+    @Resource
+    private HttpServletResponse httpServletResponse;
 
     @Resource
     private BCryptPasswordEncoder bCryptPasswordEncoder;
@@ -48,6 +54,9 @@ public class AuthenticationProviderImpl implements AuthenticationProvider {
 
     @Resource
     private SysCacheService sysCacheServiceImpl;
+
+    @Resource
+    private JwtUtil jwtUtil;
 
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
@@ -66,8 +75,8 @@ public class AuthenticationProviderImpl implements AuthenticationProvider {
         boolean isVerify = false;
 
         //用户提交验证码
-        String verifyCode = httpServletRequest.getParameter(SysConstant.JWT_PARAM_CODE);
-        String codeId = httpServletRequest.getParameter(SysConstant.JWT_PARAM_CODE_ID);
+        String verifyCode = this.httpServletRequest.getParameter(SysConstant.JWT_PARAM_CODE);
+        String codeId = this.httpServletRequest.getParameter(SysConstant.JWT_PARAM_CODE_ID);
 
         //redis中的验证码
         String code = null;
@@ -121,8 +130,23 @@ public class AuthenticationProviderImpl implements AuthenticationProvider {
         //更新登陆信息表
         this.buLoginMapper.updateLoginInfo(username);
 
-        //授权
-        return new UsernamePasswordAuthenticationToken(userDetails, password, userDetails.getAuthorities());
+        //写token
+        try {
+            this.httpServletResponse.addHeader(SysConstant.JWT_ACCESS_TOKEN,
+                    this.jwtUtil.getJwtToken(username,userDetails.getAuthorities()));
+            this.httpServletResponse.addHeader(
+                    SysConstant.JWT_ROUTES,
+                    URLEncoder.encode(JacksonUtil.toJson(((UserInfo) userDetails).getSysAuthority()),
+                            SysConstant.CHARSET_UTF8)
+                    );
+        } catch (Exception e) {
+            LOGGER.error(e.getMessage(), e);
+        }
+
+        /**
+         * 不用session，所有参数为null
+         */
+        return new UsernamePasswordAuthenticationToken(null, null, null);
     }
 
     @Override

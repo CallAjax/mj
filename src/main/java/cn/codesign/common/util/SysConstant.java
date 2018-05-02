@@ -30,6 +30,8 @@ public class SysConstant {
 
     public static final String JWT_ACCESS_TOKEN = "access_token";
 
+    public static final String JWT_ROUTES = "access_routes";
+
     public static final String JWT_ALG = "alg";
 
     public static final String JWT_TYP = "typ";
@@ -65,6 +67,8 @@ public class SysConstant {
      * 返回类型
      */
     public static final String JSON_CONTENTTYPE = "application/json;charset=UTF-8";
+
+    public static final String CHARSET_UTF8 = "UTF-8";
 
     /**
      * 错误名称

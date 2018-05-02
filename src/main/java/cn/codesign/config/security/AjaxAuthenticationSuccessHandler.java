@@ -9,8 +9,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
 
-import javax.annotation.Resource;
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -27,25 +25,14 @@ public class AjaxAuthenticationSuccessHandler implements AuthenticationSuccessHa
 
     private final static Logger LOGGER = LoggerFactory.getLogger(AjaxAuthenticationSuccessHandler.class);
 
-    @Resource
-    private JwtUtil jwtUtil;
-
-
-
 
     @Override
-    public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
+    public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException {
         ResInfo resInfo = new ResInfo();
-        UserInfo userInfo = ((UserInfo) authentication.getPrincipal());
         resInfo.setResCode(SysConstant.AJAX_RESULT_SUCCESS);
-        resInfo.setResInfo(userInfo.getSysAuthority());
         response.setContentType(SysConstant.JSON_CONTENTTYPE);
 
         try {
-            /**jwt生产token**/
-            String token = jwtUtil.getJwtToken(userInfo);
-            response.addHeader(SysConstant.JWT_ACCESS_TOKEN, token);
-
             response.getWriter().write(JacksonUtil.toJson(resInfo));
             response.getWriter().flush();
         } catch (Exception e) {

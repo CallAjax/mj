@@ -12,6 +12,7 @@ public class ResInfo {
     private String resCode;
     private String resMsg;
     private Object resInfo;
+    private String routes;
 
     public String getResCode() {
         return resCode;
@@ -30,5 +31,13 @@ public class ResInfo {
     }
     public void setResInfo(Object resInfo) {
         this.resInfo = resInfo;
+    }
+
+    public String getRoutes() {
+        return routes;
+    }
+
+    public void setRoutes(String routes) {
+        this.routes = routes;
     }
 }

@@ -7,8 +7,10 @@ import io.jsonwebtoken.SignatureAlgorithm;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Component;
 
+import java.util.Collection;
 import java.util.Date;
 
 /**
@@ -31,14 +33,13 @@ public class JwtUtil {
 
     /**
      * 生成jwttoken
-     * @param userInfo
      * @return
      */
-    public String getJwtToken(UserInfo userInfo) {
+    public String getJwtToken(String name, Collection<? extends GrantedAuthority> authorities) {
         return Jwts.builder()
                 .setHeader(SysConstant.JWT_MAP)
-                .claim(SysConstant.JWT_AUTH, userInfo.getAuthorities())
-                .setSubject(userInfo.getUsername())
+                .claim(SysConstant.JWT_AUTH, authorities)
+                .setSubject(name)
                 .setExpiration(new Date(System.currentTimeMillis() + time))
                 .signWith(SignatureAlgorithm.HS512, secret)
                 .compact();

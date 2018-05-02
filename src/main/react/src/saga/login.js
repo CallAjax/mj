@@ -52,7 +52,8 @@ export function* login() {
         /**判断登陆结果**/
         if(result.data.resCode === 'SUCCESS') {//登陆成功
             //本地存储保存token
-
+            console.log(result.headers['access_token'])
+            console.log(JSON.parse(decodeURIComponent(result.headers['access_routes'])))
         } else {//登陆失败
             yield call(changeCode)//阻塞调用验证码刷新
             obj = getError(result.data.resMsg,{codeShow:''})
