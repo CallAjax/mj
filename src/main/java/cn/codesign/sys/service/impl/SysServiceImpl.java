@@ -54,8 +54,6 @@ public class SysServiceImpl implements SysService {
             });
         });
 
-        System.out.println(map2.size());
-
         httpServletResponse.addHeader(
                 SysConstant.JWT_ACCESS_TOKEN,
                 this.jwtUtil.getJwtToken(name,userInfo.getAuthorities())
