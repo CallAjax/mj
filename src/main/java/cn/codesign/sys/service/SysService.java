@@ -1,5 +1,9 @@
 package cn.codesign.sys.service;
 
+import cn.codesign.config.security.UserInfo;
+
+import javax.servlet.http.HttpServletResponse;
+
 /**
  * Created with mj.
  * User: Sam
@@ -9,5 +13,11 @@ package cn.codesign.sys.service;
  */
 public interface SysService {
 
-    
+    /**
+     * 生成token
+     * @param httpServletResponse
+     * @param name
+     * @param userInfo
+     */
+    void resToken(HttpServletResponse httpServletResponse, String name, UserInfo userInfo) throws Exception;
 }

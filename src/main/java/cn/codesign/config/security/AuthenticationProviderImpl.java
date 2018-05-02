@@ -1,12 +1,12 @@
 package cn.codesign.config.security;
 
 import cn.codesign.common.util.BusConstant;
-import cn.codesign.common.util.JacksonUtil;
 import cn.codesign.common.util.SysConstant;
 import cn.codesign.data.mapper.BuLoginMapper;
 import cn.codesign.data.model.BuLogin;
 import cn.codesign.sys.data.model.SysDict;
 import cn.codesign.sys.service.SysCacheService;
+import cn.codesign.sys.service.SysService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.authentication.AuthenticationProvider;
@@ -22,7 +22,6 @@ import org.springframework.stereotype.Component;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.net.URLEncoder;
 import java.util.Map;
 
 /**
@@ -56,7 +55,7 @@ public class AuthenticationProviderImpl implements AuthenticationProvider {
     private SysCacheService sysCacheServiceImpl;
 
     @Resource
-    private JwtUtil jwtUtil;
+    private SysService sysServiceImpl;
 
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
@@ -132,14 +131,7 @@ public class AuthenticationProviderImpl implements AuthenticationProvider {
 
         //写token
         try {
-            this.httpServletResponse.addHeader(SysConstant.JWT_ACCESS_TOKEN,
-                    this.jwtUtil.getJwtToken(username,userDetails.getAuthorities()));
-            this.httpServletResponse.addHeader(
-                    SysConstant.JWT_ROUTES,
-                    //返回之前encode，前端js使用decodeURIComponent
-                    URLEncoder.encode(JacksonUtil.toJson(((UserInfo) userDetails).getSysAuthority()),
-                            SysConstant.CHARSET_UTF8)
-                    );
+            this.sysServiceImpl.resToken(this.httpServletResponse,userDetails.getUsername(),(UserInfo)userDetails);
         } catch (Exception e) {
             LOGGER.error(e.getMessage(), e);
         }
