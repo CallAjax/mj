@@ -2,6 +2,7 @@ package cn.codesign.config.security;
 
 import cn.codesign.common.util.SysConstant;
 import cn.codesign.sys.data.mapper.SecurityMapper;
+import cn.codesign.sys.service.SysCacheService;
 import cn.codesign.sys.service.SysService;
 import io.jsonwebtoken.Claims;
 import org.slf4j.Logger;
@@ -22,6 +23,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Created with mj.
@@ -49,6 +51,9 @@ public class JwtAuthenticationFilter extends GenericFilterBean {
     @Resource
     private SysService sysServiceImpl;
 
+    @Resource
+    private SysCacheService sysCacheServiceImpl;
+
 
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
@@ -60,6 +65,27 @@ public class JwtAuthenticationFilter extends GenericFilterBean {
             return;
         }
 
+        UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = null;
+        List<GrantedAuthority> auths = null;
+
+        /**
+         * 提供第三方无需token，同时url不受security拦截，允许访问，单独表存放url
+         * 被忽略url与受security保护的url互斥，不可同时存在
+         */
+        List<String> list = this.sysCacheServiceImpl.getIgnoreService();
+        if(list.size() > 0) {
+            String url = ((HttpServletRequest)servletRequest).getRequestURI();
+            int firstQuestionMarkIndex = url.indexOf("?");
+            if(firstQuestionMarkIndex != -1) {
+                url = url.substring(0, firstQuestionMarkIndex);
+            }
+            final String u = url;
+            if(list.stream().filter(v -> u.startsWith(v)).collect(Collectors.toList()).size() > 0){
+                usernamePasswordAuthenticationToken =
+                        new UsernamePasswordAuthenticationToken(null, null, null);
+            }
+        }
+
 
         /**验证jwt**/
         Claims claims = null;
@@ -67,11 +93,6 @@ public class JwtAuthenticationFilter extends GenericFilterBean {
         if(token != null) {
             claims = this.jwtUtil.getClaims(token);
         }
-
-        UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = null;
-        List<GrantedAuthority> auths = null;
-
-
 
         /**从token中拿权限**/
         if(claims != null) {
@@ -86,7 +107,6 @@ public class JwtAuthenticationFilter extends GenericFilterBean {
                     new UsernamePasswordAuthenticationToken(claims.getSubject(), null, auths);
 
         }
-
         /**
          * usernamePasswordAuthenticationToken = null，等于没权限，直接返回登录页
          */

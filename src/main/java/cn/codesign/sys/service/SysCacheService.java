@@ -5,6 +5,7 @@ import cn.codesign.sys.data.model.SysErrorInfo;
 import org.springframework.security.access.ConfigAttribute;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -68,4 +69,10 @@ public interface SysCacheService {
      * @Description 根据key获取redis中对应值
      */
     String getStringvalue(String key);
+
+    /**
+     * 获取不受security和jwt保护的服务
+     * @return
+     */
+    List<String> getIgnoreService();
 }

@@ -1,6 +1,7 @@
 package cn.codesign.sys.service.impl;
 
 import cn.codesign.common.util.SysConstant;
+import cn.codesign.data.mapper.BuIgnoreServiceMapper;
 import cn.codesign.sys.data.mapper.SecurityMapper;
 import cn.codesign.sys.data.mapper.SysDictMapper;
 import cn.codesign.sys.data.mapper.SysErrorInfoMapper;
@@ -35,25 +36,25 @@ public class SysCacheServiceImpl implements SysCacheService {
     private RedisTemplate redisTemplate;
     @Resource
     private SecurityMapper securityMapper;
-
-
+    @Resource
+    private BuIgnoreServiceMapper buIgnoreServiceMapper;
 
 
     /**
+     * @param
+     * @return
      * @User Sam
      * @Date 2017/6/20
      * @Time 09:22
-     * @param
-     * @return
      * @Description 获取所有错误码
      */
     @Override
     @Cacheable(value = "errorInfo")
-    public Map<String,SysErrorInfo> getErrorAll() {
-        Map<String,SysErrorInfo> map = new HashMap<String, SysErrorInfo>();
+    public Map<String, SysErrorInfo> getErrorAll() {
+        Map<String, SysErrorInfo> map = new HashMap<String, SysErrorInfo>();
         List<SysErrorInfo> list = this.sysErrorInfoMapper.getAll();
-        if(list != null){
-            for(SysErrorInfo info : list){
+        if (list != null) {
+            for (SysErrorInfo info : list) {
                 map.put(info.getErrorCode(), info);
             }
         }
@@ -61,55 +62,54 @@ public class SysCacheServiceImpl implements SysCacheService {
     }
 
     /**
+     * @param
+     * @return
      * @User Sam
      * @Date 2017/6/20
      * @Time 09:22
-     * @param
-     * @return
      * @Description 获取所有字典
      */
     @Override
     @Cacheable(value = "dict")
     public Map<String, Map<String, SysDict>> getDict() {
         List<SysDict> list = this.sysDictMapper.getDict();
-        Map<String,Map<String,SysDict>> map = new HashMap<>();
-        Map<String,SysDict> dictMap = null;
+        Map<String, Map<String, SysDict>> map = new HashMap<>();
+        Map<String, SysDict> dictMap = null;
         String id = "";
         SysDict sysDict;
-        for(int i = 0;i < list.size();i++){
+        for (int i = 0; i < list.size(); i++) {
             sysDict = list.get(i);
-            if(sysDict.getDictLevel() == 1){
-                if( i != 0){
-                    map.put(id,dictMap);
+            if (sysDict.getDictLevel() == 1) {
+                if (i != 0) {
+                    map.put(id, dictMap);
                 }
                 id = sysDict.getId();
                 dictMap = new HashMap<>();
-            }else{
-                dictMap.put(sysDict.getDictName(),sysDict);
+            } else {
+                dictMap.put(sysDict.getDictName(), sysDict);
             }
-            if(i == list.size() -1){
-                map.put(id,dictMap);
+            if (i == list.size() - 1) {
+                map.put(id, dictMap);
             }
         }
         return map;
     }
 
 
-
     /**
+     * @param
+     * @return
      * @User Sam
      * @Date 2018/4/30
      * @Time 01:49
-     * @param
-     * @return
      * @Description 获取所有权限
      */
     @Override
     @Cacheable(value = "Authority")
     public Map<String, Collection<ConfigAttribute>> getAllAuthority() {
         Map<String, Collection<ConfigAttribute>> resourceMap = new HashMap<>();
-        List<Map<String,String>> resList = this.securityMapper.getAllAuthority();
-        for(Map<String,String> map : resList){
+        List<Map<String, String>> resList = this.securityMapper.getAllAuthority();
+        for (Map<String, String> map : resList) {
             ConfigAttribute ca = new SecurityConfig(map.get(SysConstant.SECURITY_AUTHORITY_ID));
             if (resourceMap.containsKey(map.get(SysConstant.SECURITY_URL))) {
                 Collection<ConfigAttribute> value = resourceMap.get(map.get(SysConstant.SECURITY_URL));
@@ -125,11 +125,11 @@ public class SysCacheServiceImpl implements SysCacheService {
     }
 
     /**
+     * @param key:rediskey, value:redisvlaue, time:过期时间(分钟)
+     * @return
      * @User Sam
      * @Date 2018/4/26
      * @Time 15:44
-     * @param key:rediskey, value:redisvlaue, time:过期时间(分钟)
-     * @return
      * @Description setString类型到redis，过期时间为time分钟
      */
     @Override
@@ -139,16 +139,27 @@ public class SysCacheServiceImpl implements SysCacheService {
 
 
     /**
+     * @param key:rediskey
+     * @return
      * @User Sam
      * @Date 2018/4/26
      * @Time 15:53
-     * @param key:rediskey
-     * @return
      * @Description 根据key获取redis中String值
      */
     @Override
     public String getStringvalue(String key) {
         return String.valueOf(this.redisTemplate.opsForValue().get(key));
+    }
+
+
+    /**
+     * 获取不受security和jwt保护的服务
+     * @return
+     */
+    @Override
+    @Cacheable(value = "IgnoreService")
+    public List<String> getIgnoreService() {
+        return this.buIgnoreServiceMapper.getIgnoreService();
     }
 
 

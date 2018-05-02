@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.codesign.data.mapper.BuIgnoreServiceMapper">
+
+    <select id="getIgnoreService" resultType="string">
+        <![CDATA[
+            SELECT URL FROM BU_IGNORE_SERVICE
+        ]]>
+    </select>
+</mapper>
