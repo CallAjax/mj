@@ -1,8 +1,12 @@
 package cn.codesign.sys.service;
 
-import cn.codesign.config.security.UserInfo;
+import cn.codesign.sys.data.model.SysUser;
+import cn.codesign.sys.data.model.SysUserAuthority;
+import io.jsonwebtoken.Claims;
+import org.springframework.security.core.GrantedAuthority;
 
 import javax.servlet.http.HttpServletResponse;
+import java.util.List;
 
 /**
  * Created with mj.
@@ -16,7 +20,22 @@ public interface SysService {
     /**
      * 生成token
      * @param httpServletResponse
-     * @param userInfo
      */
-    void resToken(HttpServletResponse httpServletResponse, UserInfo userInfo) throws Exception;
+    void resToken(HttpServletResponse httpServletResponse, SysUserAuthority sysUserAuthority, SysUser sysUser) throws Exception;
+
+    /**
+     * 获取用户权限
+     * @param name
+     * @return
+     */
+    SysUserAuthority getSysUserAuthority(String name);
+
+    /**
+     * 验证并更新token
+     * @param claims
+     * @return
+     */
+    List<GrantedAuthority> validateAndUpdate(Claims claims, HttpServletResponse httpServletResponse);
+
+
 }

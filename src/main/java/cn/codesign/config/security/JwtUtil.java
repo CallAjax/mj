@@ -60,6 +60,7 @@ public class JwtUtil {
                         .parseClaimsJws(token.substring(7))
                         .getBody();
             } catch (Exception e) {
+                LOGGER.warn(token);
                 LOGGER.warn(e.getMessage(), e);
                 return null;
             }

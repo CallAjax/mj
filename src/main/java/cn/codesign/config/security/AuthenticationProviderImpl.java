@@ -4,7 +4,10 @@ import cn.codesign.common.util.BusConstant;
 import cn.codesign.common.util.SysConstant;
 import cn.codesign.data.mapper.BuLoginMapper;
 import cn.codesign.data.model.BuLogin;
+import cn.codesign.sys.data.mapper.SecurityMapper;
 import cn.codesign.sys.data.model.SysDict;
+import cn.codesign.sys.data.model.SysUser;
+import cn.codesign.sys.data.model.SysUserAuthority;
 import cn.codesign.sys.service.SysCacheService;
 import cn.codesign.sys.service.SysService;
 import org.slf4j.Logger;
@@ -13,8 +16,6 @@ import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
@@ -36,8 +37,6 @@ public class AuthenticationProviderImpl implements AuthenticationProvider {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(AuthenticationProviderImpl.class);
 
-    @Resource
-    private  UserDetailsService userDetailsService;
 
     @Resource
     private HttpServletRequest httpServletRequest;
@@ -56,6 +55,9 @@ public class AuthenticationProviderImpl implements AuthenticationProvider {
 
     @Resource
     private SysService sysServiceImpl;
+
+    @Resource
+    private SecurityMapper securityMapper;
 
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
@@ -100,38 +102,32 @@ public class AuthenticationProviderImpl implements AuthenticationProvider {
 
         //验证验证码
         if(isVerify){
-            if(code == null){
-                throw new UsernameNotFoundException(SysConstant.LOGIN_VERIFY_ERROR);
-            }
-            if(!code.equals(verifyCode)){
+            if(code == null || !code.equals(verifyCode)){
                 throw new UsernameNotFoundException(SysConstant.LOGIN_VERIFY_ERROR);
             }
         }
 
-        //从数据库找到的用户
-        UserDetails userDetails = userDetailsService.loadUserByUsername(username);
+        SysUser sysUser = this.securityMapper.getUser(username);
 
-
-
-        //比对数据库用户的密码
-        if(userDetails == null ||
-                !bCryptPasswordEncoder.matches(password.toString(),userDetails.getPassword())){
+        if(sysUser == null ||
+                !bCryptPasswordEncoder.matches(password.toString(),sysUser.getUserPwd())){
             //记录失败用户名
             this.buLoginMapper.insertLoginInfo(username);
             throw new UsernameNotFoundException(SysConstant.SECURITY_NAME_OR_PWD_ERROR);
         }
 
-        //用户被禁止登陆
-        if(((UserInfo)userDetails).getSysUser().getUserStatus() == SysConstant.USER_STATUS_PROHIBITED) {
+        if(sysUser.getUserStatus() == SysConstant.USER_STATUS_PROHIBITED) {
             throw new UsernameNotFoundException(SysConstant.USER_PROHIBITED);
         }
+
+        SysUserAuthority sysUserAuthority = this.sysServiceImpl.getSysUserAuthority(username);
 
         //更新登陆信息表
         this.buLoginMapper.updateLoginInfo(username);
 
         //写token
         try {
-            this.sysServiceImpl.resToken(this.httpServletResponse,(UserInfo)userDetails);
+            this.sysServiceImpl.resToken(this.httpServletResponse,sysUserAuthority, sysUser);
         } catch (Exception e) {
             LOGGER.error(e.getMessage(), e);
         }

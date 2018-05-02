@@ -3,14 +3,23 @@ package cn.codesign.sys.service.impl;
 import cn.codesign.common.util.JacksonUtil;
 import cn.codesign.common.util.SysConstant;
 import cn.codesign.config.security.JwtUtil;
-import cn.codesign.config.security.UserInfo;
+import cn.codesign.sys.data.mapper.SecurityMapper;
 import cn.codesign.sys.data.model.SysAuthority;
+import cn.codesign.sys.data.model.SysUser;
+import cn.codesign.sys.data.model.SysUserAuthority;
 import cn.codesign.sys.service.SysService;
+import io.jsonwebtoken.Claims;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletResponse;
 import java.net.URLEncoder;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -26,19 +35,26 @@ import java.util.stream.Collectors;
 @Service
 public class SysServiceImpl implements SysService {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(SysServiceImpl.class);
+
     @Resource
     private JwtUtil jwtUtil;
+
+    @Resource
+    private SecurityMapper securityMapper;
+
+    @Value("${jwt.update}")
+    private long time;
 
 
     /**
      * 生成token
      * @param httpServletResponse
-     * @param userInfo
      * @throws Exception
      */
     @Override
-    public void resToken(HttpServletResponse httpServletResponse, UserInfo userInfo) throws Exception {
-        List<SysAuthority> list = userInfo.getSysAuthority();
+    public void resToken(HttpServletResponse httpServletResponse, SysUserAuthority sysUserAuthority, SysUser sysUser) throws Exception {
+        List<SysAuthority> list = sysUserAuthority.getSysAuthority();
         List<SysAuthority> l1 = list.stream().filter(v -> v.getAuthorityLevel() == 1).collect(Collectors.toList());
         List<SysAuthority> l2 = list.stream().filter(v -> v.getAuthorityLevel() == 2).collect(Collectors.toList());
         List<SysAuthority> l3 = list.stream().filter(v -> v.getAuthorityLevel() == 3).collect(Collectors.toList());
@@ -55,7 +71,7 @@ public class SysServiceImpl implements SysService {
 
         httpServletResponse.addHeader(
                 SysConstant.JWT_ACCESS_TOKEN,
-                this.jwtUtil.getJwtToken(userInfo.getUsername(),userInfo.getAuthorities())
+                this.jwtUtil.getJwtToken(sysUser.getUserName(),sysUserAuthority.getAuthorities())
         );
         /**路由页面以及对应子路由**/
         httpServletResponse.addHeader(
@@ -71,5 +87,69 @@ public class SysServiceImpl implements SysService {
                 URLEncoder.encode(JacksonUtil.toJson(map2),
                         SysConstant.CHARSET_UTF8)
         );
+    }
+
+    /**
+     * 获取用户权限
+     * @param name
+     * @return
+     */
+    @Override
+    public SysUserAuthority getSysUserAuthority(String name) {
+        List<GrantedAuthority> auths = new ArrayList<GrantedAuthority>();
+        List<SysAuthority> list = this.securityMapper.getAuthority(name);
+        if(list.size() == 0){
+            return null;
+        }
+
+        /**authority名称会影响jwt获取对象里面的key**/
+        SimpleGrantedAuthority authority = null;
+        for(SysAuthority sysAuthority : list){
+            authority  = new SimpleGrantedAuthority(sysAuthority.getId());
+            auths.add(authority);
+        }
+        SysUserAuthority sysUserAuthority = new SysUserAuthority();
+        sysUserAuthority.setSysAuthority(list);
+        sysUserAuthority.setAuthorities(auths);
+        return sysUserAuthority;
+    }
+
+
+    /**
+     * 验证并更新token
+     * @param claims
+     * @return
+     */
+    @Override
+    public List<GrantedAuthority> validateAndUpdate(Claims claims,HttpServletResponse httpServletResponse) {
+        List<GrantedAuthority> auths = null;
+        long t = claims.getExpiration().getTime() - System.currentTimeMillis();
+
+        SysUser sysUser = null;
+        if (t < this.time) {//需要更新token
+            sysUser = this.securityMapper.getUser(claims.getSubject());
+            //检查用户状态
+            if(sysUser.getUserStatus() == SysConstant.USER_STATUS_PROHIBITED) {
+                LOGGER.warn(claims.getSubject() + ":" + SysConstant.USER_PROHIBITED);
+                return null;
+            }
+
+            SysUserAuthority sysUserAuthority = getSysUserAuthority(sysUser.getUserName());
+
+            try {
+                resToken(httpServletResponse, sysUserAuthority, sysUser);
+                auths = (List<GrantedAuthority>) sysUserAuthority.getAuthorities();
+            } catch (Exception e) {
+                LOGGER.error(e.getMessage(), e);
+                return null;
+            }
+        } else {
+            auths = new ArrayList<>();
+            List<Map<String,String>> list = (List<Map<String, String>>) claims.get(SysConstant.JWT_AUTH);
+            for(Map<String,String> map : list) {
+                auths.add(new SimpleGrantedAuthority(map.get(SysConstant.JWT_AUTHORITY)));
+            }
+        }
+        return auths;
     }
 }
