@@ -136,6 +136,7 @@ public class AuthenticationProviderImpl implements AuthenticationProvider {
                     this.jwtUtil.getJwtToken(username,userDetails.getAuthorities()));
             this.httpServletResponse.addHeader(
                     SysConstant.JWT_ROUTES,
+                    //返回之前encode，前端js使用decodeURIComponent
                     URLEncoder.encode(JacksonUtil.toJson(((UserInfo) userDetails).getSysAuthority()),
                             SysConstant.CHARSET_UTF8)
                     );
