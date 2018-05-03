@@ -1,4 +1,4 @@
-package cn.codesign.data.model;
+package cn.codesign.sys.data.model;
 
 import java.util.Date;
 

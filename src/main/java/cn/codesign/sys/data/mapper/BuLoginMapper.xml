@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="cn.codesign.data.mapper.BuLoginMapper">
-    <resultMap id="BaseResultMap" type="cn.codesign.data.model.BuLogin">
+<mapper namespace="cn.codesign.sys.data.mapper.BuLoginMapper">
+    <resultMap id="BaseResultMap" type="cn.codesign.sys.data.model.BuLogin">
         <id column="LOGIN_NAME" jdbcType="VARCHAR" property="loginName"/>
         <result column="LOGIN_STATUS" jdbcType="INTEGER" property="loginStatus"/>
         <result column="LOGIN_DATA" jdbcType="TIMESTAMP" property="loginData"/>

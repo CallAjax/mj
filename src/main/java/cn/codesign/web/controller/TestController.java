@@ -25,8 +25,6 @@ public class TestController extends BaseController {
     @Resource
     private RedisTemplate redisTemplate;
 
-//    @Resource
-//    private RedisClusterUtil redisClusterUtil;
 
     @PostMapping("/test3")
     public String test3() {

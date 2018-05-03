@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
  * User: Sam
  * Date: 2018/5/3
  * Time: 12:44
- * Description:
+ * Description: controller基类，提供公共方法
  */
 @RequestMapping("/service")
 public class BaseController {

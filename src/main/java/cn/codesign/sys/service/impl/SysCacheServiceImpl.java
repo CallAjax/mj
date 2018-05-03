@@ -1,7 +1,7 @@
 package cn.codesign.sys.service.impl;
 
 import cn.codesign.common.util.SysConstant;
-import cn.codesign.data.mapper.BuIgnoreServiceMapper;
+import cn.codesign.sys.data.mapper.BuIgnoreServiceMapper;
 import cn.codesign.sys.data.mapper.SecurityMapper;
 import cn.codesign.sys.data.mapper.SysDictMapper;
 import cn.codesign.sys.data.mapper.SysErrorInfoMapper;

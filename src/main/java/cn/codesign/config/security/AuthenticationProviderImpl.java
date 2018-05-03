@@ -2,9 +2,9 @@ package cn.codesign.config.security;
 
 import cn.codesign.common.util.BusConstant;
 import cn.codesign.common.util.SysConstant;
-import cn.codesign.data.mapper.BuLoginMapper;
-import cn.codesign.data.model.BuLogin;
+import cn.codesign.sys.data.mapper.BuLoginMapper;
 import cn.codesign.sys.data.mapper.SecurityMapper;
+import cn.codesign.sys.data.model.BuLogin;
 import cn.codesign.sys.data.model.SysDict;
 import cn.codesign.sys.data.model.SysUser;
 import cn.codesign.sys.service.SysCacheService;

@@ -1,6 +1,7 @@
-package cn.codesign.data.mapper;
+package cn.codesign.sys.data.mapper;
 
-import cn.codesign.data.model.BuLogin;
+
+import cn.codesign.sys.data.model.BuLogin;
 
 public interface BuLoginMapper {
 

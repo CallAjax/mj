@@ -1,7 +1,6 @@
 package cn.codesign.sys.task;
 
-import cn.codesign.data.mapper.BuLoginMapper;
-import cn.codesign.data.model.BuLogin;
+import cn.codesign.sys.data.mapper.BuLoginMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.scheduling.annotation.Scheduled;
