@@ -2,7 +2,6 @@ import axios from 'axios'
 import localforage from 'localforage'
 import Immutable from 'immutable'
 
-
 axios.defaults.baseURL = '/service'
 axios.defaults.timeout = 30000
 
@@ -24,6 +23,8 @@ axios.interceptors.response.use(function (response) {
             localforage.setItem('routes',Immutable.fromJS(response.data['tokenInfo']['routes']))
             localforage.setItem('menu',Immutable.fromJS(response.data['tokenInfo']['menu']))
         }
+    } else {
+        window.location.replace('/')
     }
     return response;
 }, function (error) {
