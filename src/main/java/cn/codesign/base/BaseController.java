@@ -10,6 +10,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
  * Description: controller基类，提供公共方法
  */
 @RequestMapping("/service")
-public class BaseController {
+public class BaseController extends BaseService{
 
 }

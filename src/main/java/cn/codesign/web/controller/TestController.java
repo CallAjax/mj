@@ -1,9 +1,9 @@
 package cn.codesign.web.controller;
 
 import cn.codesign.base.BaseController;
+import cn.codesign.common.util.BusinessException;
 import cn.codesign.data.vo.ResInfo;
-import cn.codesign.sys.service.SysCacheService;
-import org.springframework.data.redis.core.RedisTemplate;
+import cn.codesign.web.service.GlobalService;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -20,10 +20,8 @@ import javax.annotation.Resource;
 public class TestController extends BaseController {
 
     @Resource
-    private SysCacheService sysCacheServiceImpl;
+    private GlobalService globalServiceImpl;
 
-    @Resource
-    private RedisTemplate redisTemplate;
 
 
     @PostMapping("/test3")
@@ -32,9 +30,10 @@ public class TestController extends BaseController {
     }
 
     @PostMapping("/test2")
-    public ResInfo test2() {
+    public ResInfo test2() throws Exception {
         ResInfo resInfo = new ResInfo();
         resInfo.setResCode("SUCCESS");
-        return resInfo;
+        throw new BusinessException(getErrorInfo("E99999"));
+//        return resInfo;
     }
 }

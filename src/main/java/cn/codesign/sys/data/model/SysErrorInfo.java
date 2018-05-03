@@ -1,6 +1,8 @@
 package cn.codesign.sys.data.model;
 
-public class SysErrorInfo {
+import java.io.Serializable;
+
+public class SysErrorInfo implements Serializable {
     private String errorCode;
 
     private String errorMsg;
