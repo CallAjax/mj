@@ -3,6 +3,7 @@ package cn.codesign.sys.service.impl;
 import cn.codesign.common.util.SysConstant;
 import cn.codesign.config.security.JwtUtil;
 import cn.codesign.config.security.TokenInfo;
+import cn.codesign.data.vo.ResInfo;
 import cn.codesign.sys.data.mapper.SecurityMapper;
 import cn.codesign.sys.data.model.SysAuthority;
 import cn.codesign.sys.data.model.SysUser;
@@ -105,42 +106,25 @@ public class SysServiceImpl implements SysService {
         return sysUserAuthority;
     }
 
-
-    /**
-     * 验证并更新token
-     * @param claims
-     * @return
-     */
     @Override
-    public List<GrantedAuthority> validateAndUpdate(Claims claims,HttpServletResponse httpServletResponse) {
-        List<GrantedAuthority> auths = null;
-        long t = claims.getExpiration().getTime() - System.currentTimeMillis();
-
-        SysUser sysUser = null;
-        if (t < this.time) {//需要更新token
-            sysUser = this.securityMapper.getUser(claims.getSubject());
-            //检查用户状态
-            if(sysUser.getUserStatus() == SysConstant.USER_STATUS_PROHIBITED) {
-                LOGGER.warn(claims.getSubject() + ":" + SysConstant.USER_PROHIBITED);
-                return null;
-            }
-
-            SysUserAuthority sysUserAuthority = getSysUserAuthority(sysUser.getUserName());
-
-            try {
-                //resToken(httpServletResponse, sysUserAuthority, sysUser);
-                auths = (List<GrantedAuthority>) sysUserAuthority.getAuthorities();
-            } catch (Exception e) {
-                LOGGER.error(e.getMessage(), e);
-                return null;
-            }
-        } else {
-            auths = new ArrayList<>();
-            List<Map<String,String>> list = (List<Map<String, String>>) claims.get(SysConstant.JWT_AUTH);
-            for(Map<String,String> map : list) {
-                auths.add(new SimpleGrantedAuthority(map.get(SysConstant.JWT_AUTHORITY)));
+    public void updateToken(HttpServletResponse httpServletResponse, Claims claims, ResInfo resInfo) {
+        if(claims != null) {
+            //判断是否快超时
+            long t = claims.getExpiration().getTime() - System.currentTimeMillis();
+            if (t < this.time) {//需要更新token
+                SysUser sysUser = this.securityMapper.getUser(claims.getSubject());
+                //检查用户状态
+                if(sysUser.getUserStatus() == SysConstant.USER_STATUS_PROHIBITED) {//强制下线
+                    LOGGER.warn(claims.getSubject() + ":" + SysConstant.USER_PROHIBITED);
+                    resInfo.setStatus(SysConstant.USER_STATUS_SHUTDOWN);
+                } else {//放入新token提供给前端更新
+                    TokenInfo tokenInfo = resToken(sysUser);
+                    httpServletResponse.addHeader(SysConstant.JWT_ACCESS_TOKEN,tokenInfo.getToken());
+                    resInfo.setTokenInfo(tokenInfo);
+                }
             }
         }
-        return auths;
     }
+
+
 }

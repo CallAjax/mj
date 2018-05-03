@@ -5,11 +5,15 @@ import cn.codesign.common.util.BusinessException;
 import cn.codesign.common.util.JacksonUtil;
 import cn.codesign.common.util.SysConstant;
 import cn.codesign.data.vo.ResInfo;
+import cn.codesign.sys.service.SysService;
+import io.jsonwebtoken.Claims;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -26,12 +30,15 @@ public class AllException {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(BaseController.class);
 
+    @Resource
+    private SysService sysServiceImpl;
+
     @ExceptionHandler({Exception.class})
     public String handlerException(HttpServletRequest request, HttpServletResponse response, Exception e){
         ResInfo resJson = new ResInfo();
         try {
             if(e instanceof BusinessException){
-                LOGGER.warn("业务异常：" + ((BusinessException) e).getSysErrorInfo().getErrorMsg(),e);
+                LOGGER.warn("业务异常：" + ((BusinessException) e).getSysErrorInfo().getErrorMsg());
                 resJson.setResCode(((BusinessException) e).getSysErrorInfo().getErrorCode());
                 resJson.setResMsg(((BusinessException) e).getSysErrorInfo().getErrorMsg());
                 resJson.setResInfo(((BusinessException) e).getSysErrorInfo());
@@ -41,6 +48,8 @@ public class AllException {
                 resJson.setResMsg(e.getMessage());
             }
             if(isAjax(request)){
+                Claims claims = (Claims) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+                this.sysServiceImpl.updateToken(response,claims,resJson);
                 response.setContentType(SysConstant.JSON_CONTENTTYPE);
                 response.getWriter().write(JacksonUtil.toJson(resJson));
                 response.getWriter().flush();

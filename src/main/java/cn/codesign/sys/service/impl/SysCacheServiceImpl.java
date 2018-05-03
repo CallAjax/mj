@@ -49,7 +49,7 @@ public class SysCacheServiceImpl implements SysCacheService {
      * @Description 获取所有错误码
      */
     @Override
-    @Cacheable(value = "errorInfo")
+    @Cacheable(value = "ErrorInfo")
     public Map<String, SysErrorInfo> getErrorAll() {
         Map<String, SysErrorInfo> map = new HashMap<String, SysErrorInfo>();
         List<SysErrorInfo> list = this.sysErrorInfoMapper.getAll();

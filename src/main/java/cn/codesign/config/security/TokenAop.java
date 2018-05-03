@@ -1,9 +1,6 @@
 package cn.codesign.config.security;
 
-import cn.codesign.common.util.SysConstant;
 import cn.codesign.data.vo.ResInfo;
-import cn.codesign.sys.data.mapper.SecurityMapper;
-import cn.codesign.sys.data.model.SysUser;
 import cn.codesign.sys.service.SysService;
 import io.jsonwebtoken.Claims;
 import org.aspectj.lang.annotation.AfterReturning;
@@ -34,8 +31,6 @@ public class TokenAop {
     @Value("${jwt.update}")
     private long time;
 
-    @Resource
-    private SecurityMapper securityMapper;
 
     @Resource
     private SysService sysServiceImpl;
@@ -47,25 +42,11 @@ public class TokenAop {
     @Pointcut("execution(* cn.codesign.web.controller.*.*(..))")
     public void controllerToken() {}
 
+
     @AfterReturning(pointcut = "controllerToken()", returning = "resInfo" )
     public void updateToken(ResInfo resInfo){
         /**claims由JwtAuthenticationFilter写入，没有则不处理**/
         Claims claims = (Claims) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        if(claims != null) {
-            //判断是否快超时
-            long t = claims.getExpiration().getTime() - System.currentTimeMillis();
-            if (t < this.time) {//需要更新token
-                SysUser sysUser = this.securityMapper.getUser(claims.getSubject());
-                //检查用户状态
-                if(sysUser.getUserStatus() == SysConstant.USER_STATUS_PROHIBITED) {//强制下线
-                    LOGGER.warn(claims.getSubject() + ":" + SysConstant.USER_PROHIBITED);
-                    resInfo.setStatus(SysConstant.USER_STATUS_SHUTDOWN);
-                } else {//放入新token提供给前端更新
-                    TokenInfo tokenInfo = this.sysServiceImpl.resToken(sysUser);
-                    this.httpServletResponse.addHeader(SysConstant.JWT_ACCESS_TOKEN,tokenInfo.getToken());
-                    resInfo.setTokenInfo(tokenInfo);
-                }
-            }
-        }
+        this.sysServiceImpl.updateToken(this.httpServletResponse,claims,resInfo);
     }
 }
