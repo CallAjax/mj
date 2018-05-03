@@ -20,7 +20,6 @@ import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -98,7 +97,7 @@ public class JwtAuthenticationFilter extends GenericFilterBean {
         if(claims != null) {
             /**判断是否更新token**/
             try {
-                auths = this.sysServiceImpl.validateAndUpdate(claims, (HttpServletResponse) servletResponse);
+                //auths = this.sysServiceImpl.validateAndUpdate(claims, (HttpServletResponse) servletResponse);
             } catch (Exception e) {
                 LOGGER.error(e.getMessage(), e);
             }

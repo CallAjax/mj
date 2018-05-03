@@ -1,8 +1,8 @@
 package cn.codesign.sys.service.impl;
 
-import cn.codesign.common.util.JacksonUtil;
 import cn.codesign.common.util.SysConstant;
 import cn.codesign.config.security.JwtUtil;
+import cn.codesign.config.security.TokenInfo;
 import cn.codesign.sys.data.mapper.SecurityMapper;
 import cn.codesign.sys.data.model.SysAuthority;
 import cn.codesign.sys.data.model.SysUser;
@@ -18,7 +18,6 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletResponse;
-import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -47,13 +46,18 @@ public class SysServiceImpl implements SysService {
     private long time;
 
 
+
     /**
-     * 生成token
-     * @param httpServletResponse
-     * @throws Exception
+     * @User Sam
+     * @Date 2018/5/3
+     * @Time 08:38
+     * @param
+     * @return
+     * @Description 生成token信息
      */
     @Override
-    public void resToken(HttpServletResponse httpServletResponse, SysUserAuthority sysUserAuthority, SysUser sysUser) throws Exception {
+    public TokenInfo resToken(SysUser sysUser) {
+        SysUserAuthority sysUserAuthority = getSysUserAuthority(sysUser.getUserName());
         List<SysAuthority> list = sysUserAuthority.getSysAuthority();
         List<SysAuthority> l1 = list.stream().filter(v -> v.getAuthorityLevel() == 1).collect(Collectors.toList());
         List<SysAuthority> l2 = list.stream().filter(v -> v.getAuthorityLevel() == 2).collect(Collectors.toList());
@@ -69,24 +73,11 @@ public class SysServiceImpl implements SysService {
             });
         });
 
-        httpServletResponse.addHeader(
-                SysConstant.JWT_ACCESS_TOKEN,
-                this.jwtUtil.getJwtToken(sysUser.getUserName(),sysUserAuthority.getAuthorities())
-        );
-        /**路由页面以及对应子路由**/
-        httpServletResponse.addHeader(
-                SysConstant.JWT_ROUTES,
-                //返回之前encode，前端js使用decodeURIComponent
-                URLEncoder.encode(JacksonUtil.toJson(map1),
-                        SysConstant.CHARSET_UTF8)
-        );
-        /**所有子路由下具体按钮**/
-        httpServletResponse.addHeader(
-                SysConstant.JWT_MENU,
-                //返回之前encode，前端js使用decodeURIComponent
-                URLEncoder.encode(JacksonUtil.toJson(map2),
-                        SysConstant.CHARSET_UTF8)
-        );
+        TokenInfo tokenInfo = new TokenInfo();
+        tokenInfo.setToken(this.jwtUtil.getJwtToken(sysUser.getUserName(),sysUserAuthority.getAuthorities()));
+        tokenInfo.setRoutes(map1);
+        tokenInfo.setMenu(map2);
+        return tokenInfo;
     }
 
     /**
@@ -137,7 +128,7 @@ public class SysServiceImpl implements SysService {
             SysUserAuthority sysUserAuthority = getSysUserAuthority(sysUser.getUserName());
 
             try {
-                resToken(httpServletResponse, sysUserAuthority, sysUser);
+                //resToken(httpServletResponse, sysUserAuthority, sysUser);
                 auths = (List<GrantedAuthority>) sysUserAuthority.getAuthorities();
             } catch (Exception e) {
                 LOGGER.error(e.getMessage(), e);

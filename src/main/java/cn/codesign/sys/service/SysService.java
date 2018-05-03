@@ -1,5 +1,6 @@
 package cn.codesign.sys.service;
 
+import cn.codesign.config.security.TokenInfo;
 import cn.codesign.sys.data.model.SysUser;
 import cn.codesign.sys.data.model.SysUserAuthority;
 import io.jsonwebtoken.Claims;
@@ -19,9 +20,8 @@ public interface SysService {
 
     /**
      * 生成token
-     * @param httpServletResponse
      */
-    void resToken(HttpServletResponse httpServletResponse, SysUserAuthority sysUserAuthority, SysUser sysUser) throws Exception;
+    TokenInfo resToken(SysUser sysUser);
 
     /**
      * 获取用户权限

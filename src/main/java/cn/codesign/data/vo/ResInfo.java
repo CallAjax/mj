@@ -1,5 +1,7 @@
 package cn.codesign.data.vo;
 
+import cn.codesign.config.security.TokenInfo;
+
 /**
  * Created with codesign.
  * User: Sam
@@ -12,7 +14,7 @@ public class ResInfo {
     private String resCode;
     private String resMsg;
     private Object resInfo;
-    private String routes;
+    private TokenInfo tokenInfo;
 
     public String getResCode() {
         return resCode;
@@ -33,11 +35,11 @@ public class ResInfo {
         this.resInfo = resInfo;
     }
 
-    public String getRoutes() {
-        return routes;
+    public TokenInfo getTokenInfo() {
+        return tokenInfo;
     }
 
-    public void setRoutes(String routes) {
-        this.routes = routes;
+    public void setTokenInfo(TokenInfo tokenInfo) {
+        this.tokenInfo = tokenInfo;
     }
 }

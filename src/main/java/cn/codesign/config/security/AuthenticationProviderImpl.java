@@ -7,7 +7,6 @@ import cn.codesign.data.model.BuLogin;
 import cn.codesign.sys.data.mapper.SecurityMapper;
 import cn.codesign.sys.data.model.SysDict;
 import cn.codesign.sys.data.model.SysUser;
-import cn.codesign.sys.data.model.SysUserAuthority;
 import cn.codesign.sys.service.SysCacheService;
 import cn.codesign.sys.service.SysService;
 import org.slf4j.Logger;
@@ -120,22 +119,11 @@ public class AuthenticationProviderImpl implements AuthenticationProvider {
             throw new UsernameNotFoundException(SysConstant.USER_PROHIBITED);
         }
 
-        SysUserAuthority sysUserAuthority = this.sysServiceImpl.getSysUserAuthority(username);
 
         //更新登陆信息表
         this.buLoginMapper.updateLoginInfo(username);
 
-        //写token
-        try {
-            this.sysServiceImpl.resToken(this.httpServletResponse,sysUserAuthority, sysUser);
-        } catch (Exception e) {
-            LOGGER.error(e.getMessage(), e);
-        }
-
-        /**
-         * 不用session，所有参数为null
-         */
-        return new UsernamePasswordAuthenticationToken(null, null, null);
+        return new UsernamePasswordAuthenticationToken(sysUser, null, null);
     }
 
     @Override
