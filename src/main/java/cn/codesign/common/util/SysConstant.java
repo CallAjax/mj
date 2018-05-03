@@ -56,6 +56,8 @@ public class SysConstant {
 
     public static final int USER_STATUS_PROHIBITED = 0;
 
+    public static final String USER_STATUS_SHUTDOWN = "0";
+
     public static final String USER_PROHIBITED = "该用户禁止登陆";
 
     public static final Map<String, Object> JWT_MAP = new HashMap<>();

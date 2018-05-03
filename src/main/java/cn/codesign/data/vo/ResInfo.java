@@ -15,22 +15,28 @@ public class ResInfo {
     private String resMsg;
     private Object resInfo;
     private TokenInfo tokenInfo;
+    private String status;
 
     public String getResCode() {
         return resCode;
     }
+
     public void setResCode(String resCode) {
         this.resCode = resCode;
     }
+
     public String getResMsg() {
         return resMsg;
     }
+
     public void setResMsg(String resMsg) {
         this.resMsg = resMsg;
     }
+
     public Object getResInfo() {
         return resInfo;
     }
+
     public void setResInfo(Object resInfo) {
         this.resInfo = resInfo;
     }
@@ -41,5 +47,13 @@ public class ResInfo {
 
     public void setTokenInfo(TokenInfo tokenInfo) {
         this.tokenInfo = tokenInfo;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 }

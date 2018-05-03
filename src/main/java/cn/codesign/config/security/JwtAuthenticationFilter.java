@@ -10,6 +10,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.GenericFilterBean;
@@ -21,7 +22,9 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
@@ -95,15 +98,14 @@ public class JwtAuthenticationFilter extends GenericFilterBean {
 
         /**从token中拿权限**/
         if(claims != null) {
-            /**判断是否更新token**/
-            try {
-                //auths = this.sysServiceImpl.validateAndUpdate(claims, (HttpServletResponse) servletResponse);
-            } catch (Exception e) {
-                LOGGER.error(e.getMessage(), e);
+            auths = new ArrayList<>();
+            List<Map<String,String>> authlist = (List<Map<String, String>>) claims.get(SysConstant.JWT_AUTH);
+            for(Map<String,String> map : authlist) {
+                auths.add(new SimpleGrantedAuthority(map.get(SysConstant.JWT_AUTHORITY)));
             }
 
             usernamePasswordAuthenticationToken =
-                    new UsernamePasswordAuthenticationToken(claims.getSubject(), null, auths);
+                    new UsernamePasswordAuthenticationToken(claims, null, auths);
 
         }
         /**

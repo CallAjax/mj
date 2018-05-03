@@ -1,12 +1,13 @@
 package cn.codesign.web.controller;
 
+import cn.codesign.base.BaseController;
+import cn.codesign.data.vo.ResInfo;
 import cn.codesign.sys.service.SysCacheService;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
-import java.util.concurrent.TimeUnit;
 
 /**
  * Created with mj.
@@ -16,8 +17,7 @@ import java.util.concurrent.TimeUnit;
  * Description:
  */
 @RestController
-@RequestMapping("/service")
-public class TestController {
+public class TestController extends BaseController {
 
     @Resource
     private SysCacheService sysCacheServiceImpl;
@@ -28,14 +28,15 @@ public class TestController {
 //    @Resource
 //    private RedisClusterUtil redisClusterUtil;
 
-    @RequestMapping("/test3")
+    @PostMapping("/test3")
     public String test3() {
         return "test3";
     }
 
-    @RequestMapping("/test2")
-    public String test2() {
-        this.redisTemplate.opsForValue().set("111","222",1,TimeUnit.MINUTES);
-        return "test2";
+    @PostMapping("/test2")
+    public ResInfo test2() {
+        ResInfo resInfo = new ResInfo();
+        resInfo.setResCode("SUCCESS");
+        return resInfo;
     }
 }
