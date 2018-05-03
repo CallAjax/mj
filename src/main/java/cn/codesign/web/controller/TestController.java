@@ -1,7 +1,6 @@
 package cn.codesign.web.controller;
 
 import cn.codesign.base.BaseController;
-import cn.codesign.common.util.BusinessException;
 import cn.codesign.data.vo.ResInfo;
 import cn.codesign.web.service.GlobalService;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -33,7 +32,7 @@ public class TestController extends BaseController {
     public ResInfo test2() throws Exception {
         ResInfo resInfo = new ResInfo();
         resInfo.setResCode("SUCCESS");
-        throw new BusinessException(getErrorInfo("E99999"));
-//        return resInfo;
+//        throw new BusinessException(getErrorInfo("E99999"));
+        return resInfo;
     }
 }
