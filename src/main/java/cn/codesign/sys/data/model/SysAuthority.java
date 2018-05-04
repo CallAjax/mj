@@ -15,6 +15,7 @@ public class SysAuthority {
     private int authorityIndex;
     private String authorityParentId;
     private String url;
+    private String compName;
 
     public String getId() {
         return id;
@@ -62,5 +63,13 @@ public class SysAuthority {
 
     public void setUrl(String url) {
         this.url = url;
+    }
+
+    public String getCompName() {
+        return compName;
+    }
+
+    public void setCompName(String compName) {
+        this.compName = compName;
     }
 }

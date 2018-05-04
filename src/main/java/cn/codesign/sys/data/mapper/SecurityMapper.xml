@@ -20,12 +20,13 @@
         <result column="AUTHORITY_INDEX" jdbcType="INTEGER" property="authorityIndex" />
         <result column="AUTHORITY_PARENT_ID" jdbcType="VARCHAR" property="authorityParentId" />
         <result column="URL" jdbcType="VARCHAR" property="url" />
+        <result column="COMP_NAME" jdbcType="VARCHAR" property="compName" />
     </resultMap>
 
     <select id="getAuthority" resultMap="sysAuthority">
         <![CDATA[
 
-			SELECT T1.ID,T1.AUTHORITY_LEVEL,T1.AUTHORITY_NAME,T1.AUTHORITY_INDEX,T1.AUTHORITY_PARENT_ID,T3.URL
+			SELECT T1.ID,T1.AUTHORITY_LEVEL,T1.AUTHORITY_NAME,T1.AUTHORITY_INDEX,T1.AUTHORITY_PARENT_ID,T3.URL,T3.COMP_NAME
             FROM SYS_AUTHORITY T1 LEFT JOIN SYS_AUTHORITY_RESOURCE T2 ON (T1.ID = T2.AUTHORITY_ID AND T1.AUTHORITY_LEVEL < 3
             AND T1.ID IN(SELECT DISTINCT T3.AUTHORITY_ID FROM SYS_USER T1 JOIN SYS_USER_ROLE T2 ON T1.ID = T2.USER_ID
             JOIN SYS_ROLE_AUTHORITY T3 ON T2.ROLE_ID = T3.ROLE_ID WHERE T1.USER_NAME = #{userName}))

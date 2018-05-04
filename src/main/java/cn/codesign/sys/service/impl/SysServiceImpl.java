@@ -66,9 +66,9 @@ public class SysServiceImpl implements SysService {
         Map<String,List<SysAuthority>> map1 = new HashMap<>();
         Map<String,List<SysAuthority>> map2 = new HashMap<>();
         l1.stream().forEach(v1 -> {
-            map1.put(v1.getUrl(), l2.stream().filter(m1 -> v1.getId().equals(m1.getAuthorityParentId()))
+            map1.put(v1.getUrl() + "^" + v1.getCompName(), l2.stream().filter(m1 -> v1.getId().equals(m1.getAuthorityParentId()))
                     .collect(Collectors.toList()));
-            map1.get(v1.getUrl()).forEach(v2 -> {
+            map1.get(v1.getUrl() + "^" + v1.getCompName()).forEach(v2 -> {
                 map2.put(v2.getUrl(),l3.stream().filter(m2 -> v2.getId().equals(m2.getAuthorityParentId()))
                         .collect(Collectors.toList()));
             });
