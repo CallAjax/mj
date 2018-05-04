@@ -16,18 +16,22 @@ localforage.getItem('Authorization').then(v => {
     });
 })
 
+
 axios.interceptors.response.use(function (response) {
-    if(response.data.status === null) {
+    if(response.data.status === null || response.data.status === undefined) {
         if(response.headers.hasOwnProperty('access_token')) {
             localforage.setItem('Authorization','Bearer ' + response.headers['access_token'])
             localforage.setItem('routes',Immutable.fromJS(response.data['tokenInfo']['routes']))
             localforage.setItem('menu',Immutable.fromJS(response.data['tokenInfo']['menu']))
         }
     } else {
-        window.location.replace('/')
+        localforage.clear().then(() => window.location.replace('/'))
     }
     return response;
 }, function (error) {
+    if(error.toString() === 'Error: Request failed with status code 403') {
+        localforage.clear().then(() => window.location.replace('/'))
+    }
     return Promise.reject(error);
 });
 

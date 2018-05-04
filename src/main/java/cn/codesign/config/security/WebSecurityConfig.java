@@ -24,6 +24,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Resource
     private JwtAuthenticationFilter jwtAuthenticationFilter;
 
+    @Resource
+    private AjaxAuthenticationEntryPoint ajaxAuthenticationEntryPoint;
+
     @Bean
     public BCryptPasswordEncoder bCryptPasswordEncoder() {
         return new BCryptPasswordEncoder(4);
@@ -43,6 +46,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .loginPage("/").loginProcessingUrl("/service/manage/login").successHandler(ajaxAuthenticationSuccessHandler)
                 //登录失败处理
                 .failureHandler(ajaxAuthenticationFailureHandler)
+                .and().exceptionHandling().authenticationEntryPoint(ajaxAuthenticationEntryPoint)
                 .and().addFilterBefore(jwtAuthenticationFilter,UsernamePasswordAuthenticationFilter.class);
     }
 
