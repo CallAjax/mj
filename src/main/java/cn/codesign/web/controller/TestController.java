@@ -32,6 +32,7 @@ public class TestController extends BaseController {
     public ResInfo test2() throws Exception {
         ResInfo resInfo = new ResInfo();
         resInfo.setResCode("SUCCESS");
+        resInfo.setResMsg("test2");
 //        throw new BusinessException(getErrorInfo("E99999"));
         return resInfo;
     }
