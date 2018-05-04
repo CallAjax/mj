@@ -61,7 +61,7 @@ public class JwtUtil {
                         .getBody();
             } catch (Exception e) {
                 LOGGER.warn(token);
-                LOGGER.warn(e.getMessage(), e);
+                LOGGER.warn(e.getMessage());
                 return null;
             }
         }
