@@ -54,7 +54,7 @@ module.exports = config = {
                 use: extractTextPlugin.extract({
                     fallback: "style-loader",
                     use: [{
-                        loader: "css-loader"
+                        loader: "css-loader?modules"
                     }, {
                         loader: "sass-loader"
                     }]
