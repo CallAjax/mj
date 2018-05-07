@@ -23,6 +23,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 /**
@@ -63,15 +64,16 @@ public class SysServiceImpl implements SysService {
         List<SysAuthority> l1 = list.stream().filter(v -> v.getAuthorityLevel() == 1).collect(Collectors.toList());
         List<SysAuthority> l2 = list.stream().filter(v -> v.getAuthorityLevel() == 2).collect(Collectors.toList());
         List<SysAuthority> l3 = list.stream().filter(v -> v.getAuthorityLevel() == 3).collect(Collectors.toList());
-        Map<String,List<SysAuthority>> map1 = new HashMap<>();
-        Map<String,List<SysAuthority>> map2 = new HashMap<>();
-        l1.stream().forEach(v1 -> {
-            map1.put(v1.getUrl() + "^" + v1.getCompName(), l2.stream().filter(m1 -> v1.getId().equals(m1.getAuthorityParentId()))
-                    .collect(Collectors.toList()));
-            map1.get(v1.getUrl() + "^" + v1.getCompName()).forEach(v2 -> {
-                map2.put(v2.getUrl(),l3.stream().filter(m2 -> v2.getId().equals(m2.getAuthorityParentId()))
-                        .collect(Collectors.toList()));
-            });
+        Map<String,Map<String,SysAuthority>> map1 = new HashMap<>();
+        Map<String,Map<String,SysAuthority>> map2 = new HashMap<>();
+        Map<String,Map<String,SysAuthority>> map3 = new HashMap<>();
+        l1.stream().forEach(v -> {
+            map1.put(v.getUrl(), l2.stream().filter(m -> v.getId().equals(m.getAuthorityParentId()))
+                    .collect(Collectors.toMap(SysAuthority::getUrl,Function.identity())));
+        });
+        l2.stream().forEach(v -> {
+            map2.put(v.getUrl(), l3.stream().filter(m -> v.getId().equals(m.getAuthorityParentId()))
+                    .collect(Collectors.toMap(SysAuthority::getId,Function.identity())));
         });
 
         TokenInfo tokenInfo = new TokenInfo();

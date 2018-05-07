@@ -11,11 +11,8 @@ public class SysAuthority {
 
     private String id;
     private int authorityLevel;
-    private String authorityName;
-    private int authorityIndex;
     private String authorityParentId;
     private String url;
-    private String compName;
 
     public String getId() {
         return id;
@@ -33,22 +30,6 @@ public class SysAuthority {
         this.authorityLevel = authorityLevel;
     }
 
-    public String getAuthorityName() {
-        return authorityName;
-    }
-
-    public void setAuthorityName(String authorityName) {
-        this.authorityName = authorityName;
-    }
-
-    public int getAuthorityIndex() {
-        return authorityIndex;
-    }
-
-    public void setAuthorityIndex(int authorityIndex) {
-        this.authorityIndex = authorityIndex;
-    }
-
     public String getAuthorityParentId() {
         return authorityParentId;
     }
@@ -63,13 +44,5 @@ public class SysAuthority {
 
     public void setUrl(String url) {
         this.url = url;
-    }
-
-    public String getCompName() {
-        return compName;
-    }
-
-    public void setCompName(String compName) {
-        this.compName = compName;
     }
 }

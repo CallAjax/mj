@@ -2,7 +2,6 @@ package cn.codesign.config.security;
 
 import cn.codesign.sys.data.model.SysAuthority;
 
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -15,8 +14,8 @@ import java.util.Map;
 public class TokenInfo {
 
     private String token;
-    private Map<String,List<SysAuthority>> routes;
-    private Map<String,List<SysAuthority>> menu;
+    private Map<String,Map<String,SysAuthority>> routes;
+    private Map<String,Map<String,SysAuthority>> menu;
 
     public String getToken() {
         return token;
@@ -26,19 +25,19 @@ public class TokenInfo {
         this.token = token;
     }
 
-    public Map<String, List<SysAuthority>> getRoutes() {
+    public Map<String, Map<String, SysAuthority>> getRoutes() {
         return routes;
     }
 
-    public void setRoutes(Map<String, List<SysAuthority>> routes) {
+    public void setRoutes(Map<String, Map<String, SysAuthority>> routes) {
         this.routes = routes;
     }
 
-    public Map<String, List<SysAuthority>> getMenu() {
+    public Map<String, Map<String, SysAuthority>> getMenu() {
         return menu;
     }
 
-    public void setMenu(Map<String, List<SysAuthority>> menu) {
+    public void setMenu(Map<String, Map<String, SysAuthority>> menu) {
         this.menu = menu;
     }
 }
