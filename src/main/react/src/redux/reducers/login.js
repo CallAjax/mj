@@ -14,6 +14,7 @@ const initialState = Immutable.fromJS({
     msg: '',
     loading: 'determinate',
     codeId: '',
+    status: 0,
 })
 
 

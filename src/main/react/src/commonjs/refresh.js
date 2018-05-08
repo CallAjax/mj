@@ -15,7 +15,6 @@ export default params => Comp => class extends Component {
                 break
             }
         }
-
         return !is(this.props.location.pathname, nextProps.location.pathname) || isChange
     }
 
