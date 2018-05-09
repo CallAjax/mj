@@ -5,10 +5,9 @@ import Loading from 'components/Loading'
 import localforage from 'localforage'
 import { validateRoutes, updateRoutes } from 'actions'
 import Login from 'containers/login'
-import Error from 'components/Error'
 import Home from 'containers/home'
-import {put} from "redux-saga/es/effects";
 import Immutable from "immutable";
+import { post } from 'commonjs/request'
 
 
 class Routes extends Component {
@@ -27,7 +26,9 @@ class Routes extends Component {
                        this.props.history.replace('/login')
                    }
                } else {
-
+                   post('/auth/token').then(() => {
+                       console.log(1111111)
+                   })
                }
            })
        },2000)
@@ -40,6 +41,7 @@ class Routes extends Component {
             return (
                 <div>
                     {this.props.routes.has('/login')?<Route path='/login' component={Login}/> : ''}
+                    {this.props.routes.has('/home')?<Route path='/login' component={Home}/> : ''}
                 </div>
             )
         }

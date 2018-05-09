@@ -26,6 +26,7 @@ axios.interceptors.response.use(function (response) {
         }
     } else {
         localforage.clear().then(() => window.location.replace('/'))
+        return Promise.reject('auth error');
     }
     return response;
 }, function (error) {
