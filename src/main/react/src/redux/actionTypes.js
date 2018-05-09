@@ -4,5 +4,5 @@ export const LOGIN_COMMIT = 'LOGIN_COMMIT' //登陆
 export const CHANGE_CODE = 'CHANGE_CODE' //获取验证码
 
 /**路由信息**/
-export const SAGA_VALIDATE_ROUTES = 'VALIDATE_ROUTES' //路由验证
+export const SAGA_GET_ROUTES = 'VALIDATE_ROUTES' //路由验证
 export const UPDATE_ROUTES = 'UPDATE_ROUTES' //更新路由

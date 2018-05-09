@@ -9,7 +9,7 @@ spring:
 
 jwt:
   secret: $2a$04$4mrJX.XBfqh4uGtXzveSKOuHGie8tlT.0..hbf5JRJ77Xtb462xj2
-  time: 3600000
+  time: 14400000
   update: 3600000
 
 request:

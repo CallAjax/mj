@@ -1,24 +1,27 @@
 import localforage from 'localforage'
 import Immutable from 'immutable'
 import { select, put,call } from 'redux-saga/effects'
+import { post } from 'commonjs/request'
 import {
     UPDATE_ROUTES,
 } from 'actionTypes'
 
-export function* validateRoutes() {
-    const auth = yield call(getAuth)
-    if(auth === null) {//没有本地数据，直接显示登录页面
-        const routes = Immutable.fromJS({'/login':{}})
-        const update = yield put({type: UPDATE_ROUTES, routes})
-    } else {
-
-    }
+export function* getRoutes(action) {
+    localforage.getItem('Authorization').then(v => {
+        if (v === null) {//没有本地信息
+            const routes = Immutable.fromJS({'/login': {}})
+            action.props.updateRoutes(routes)
+            if (action.props.location.pathname !== '/login') {
+                action.props.history.replace('/login')
+            }
+        } else {//需要验证本地信息
+            post('/auth/token').then(() => {
+                console.log(1111111)
+            })
+        }
+    })
 }
 
-const getAuth = async function(){
-    let auth
-    await localforage.getItem('Authorization').then(v => auth = v)
-    return auth
-}
+
 
 

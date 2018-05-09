@@ -1,11 +1,11 @@
 import {
-    SAGA_VALIDATE_ROUTES,
+    SAGA_GET_ROUTES,
     UPDATE_ROUTES,
 } from 'actionTypes'
 
 
-export const validateRoutes = () => {
-    return { type: SAGA_VALIDATE_ROUTES }
+export const getRoutes = (props) => {
+    return { type: SAGA_GET_ROUTES, props }
 }
 
 export const updateRoutes = (routes) => {
