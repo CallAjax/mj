@@ -4,7 +4,7 @@ import {
 import Immutable from 'immutable'
 
 const initialState = Immutable.fromJS({
-    '/error': {},
+    '': {},
 })
 
 export default (state = initialState, action) => {
