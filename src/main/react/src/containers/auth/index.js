@@ -20,7 +20,6 @@ class Routes extends Component {
     }
 
     render() {
-        console.log(this.props.auth.get('routes').size)
         if(this.props.auth.get('routes').size === 0) {
             return <Loading />
         } else {
