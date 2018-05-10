@@ -4,7 +4,7 @@ import { BrowserRouter, Route, Switch } from 'react-router-dom'
 import { Provider } from 'react-redux'
 import store from './redux/reducers'
 import Error from 'components/Error'
-import Routes from 'containers/routes'
+import Routes from 'containers/auth'
 
 render(
     <Provider store={store}>

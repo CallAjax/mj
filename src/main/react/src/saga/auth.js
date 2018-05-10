@@ -9,22 +9,19 @@ import {
 export function* getRoutes(action) {
     localforage.getItem('Authorization').then(v => {
         if (v === null) {//没有本地信息
-            const routes = Immutable.fromJS({'/login': {}})
-            action.props.updateRoutes(routes)
+            const obj = {'/login': {}}
+            action.props.updateRoutes(obj, 'routes')
             if (action.props.location.pathname !== '/login') {
                 action.props.history.replace('/login')
             }
         } else {//需要验证本地信息
             localforage.getItem('auth').then(auth => {
                 post('/auth/token').then((t) => {
-                    let routes = {}
                     if(t.auth !== undefined) {
-                        routes = Immutable.fromJS(t.auth.routes)
+                        action.props.updateRoutes(t.auth)
                     } else {
-                        routes = Immutable.fromJS(auth.routes)
+                        action.props.updateRoutes(auth)
                     }
-                    console.log(auth)
-                    action.props.updateRoutes(routes)
                     action.props.history.replace('/home')
                 })
             })

@@ -5,7 +5,7 @@ import {
     SAGA_GET_ROUTES,
 } from 'actionTypes'
 import { login, changeCode } from './login'
-import { getRoutes } from './routes'
+import { getRoutes } from './auth'
 
 
 export default function* () {

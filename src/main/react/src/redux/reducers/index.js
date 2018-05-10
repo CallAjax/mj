@@ -4,13 +4,13 @@ import Immutable from 'immutable'
 import createSagaMiddleware from 'redux-saga'
 import rootSaga from 'sagas'
 import login from './login'
-import routes from './routes'
+import auth from './auth'
 
 
 const sagaMiddleware = createSagaMiddleware()
 const rootReducer = combineReducers({
     login,
-    routes,
+    auth,
 })
 
 const store = createStore(

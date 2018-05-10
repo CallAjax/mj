@@ -5,7 +5,6 @@ import Loading from 'components/Loading'
 import { getRoutes, updateRoutes } from 'actions'
 import Login from 'containers/login'
 import Home from 'containers/home'
-import Immutable from "immutable";
 
 
 class Routes extends Component {
@@ -21,13 +20,13 @@ class Routes extends Component {
     }
 
     render() {
-        if(this.props.routes.size === 1) {
+        if(this.props.auth.get('routes').size === 0) {
             return <Loading />
         } else {
             return (
                 <Switch>
-                    {this.props.routes.has('/login')?<Route path='/login' component={Login}/> : ''}
-                    {this.props.routes.has('/home')?<Route path='/home' component={Home}/> : ''}
+                    {this.props.auth.get('routes').has('/login')?<Route path='/login' component={Login}/> : ''}
+                    {this.props.auth.get('routes').has('/home')?<Route path='/home' component={Home}/> : ''}
                 </Switch>
             )
         }
@@ -36,7 +35,7 @@ class Routes extends Component {
 
 const mapStateToProps = state => {
     return {
-        routes: state.get('routes'),
+        auth: state.get('auth'),
         login: state.get('login'),
     }
 }

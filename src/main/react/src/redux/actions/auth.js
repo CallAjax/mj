@@ -8,6 +8,6 @@ export const getRoutes = (props) => {
     return { type: SAGA_GET_ROUTES, props }
 }
 
-export const updateRoutes = (routes) => {
-    return { type: UPDATE_ROUTES, routes}
+export const updateRoutes = (obj, name) => {
+    return { type: UPDATE_ROUTES, obj, name}
 }
