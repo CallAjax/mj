@@ -22,13 +22,14 @@ export function* getRoutes(action) {
                     } else {
                         action.props.updateRoutes(auth)
                     }
-                    action.props.history.replace('/home')
+                    if(action.props.location.pathname === '/login' || action.props.location.pathname === '/') {
+                        action.props.history.replace('/home')
+                    }
                 })
             })
 
         }
     })
-    return 'aaa'
 }
 
 

@@ -9,8 +9,8 @@ export const changeLoginForm = (obj) => {
     return { type: CHANGE_LOGIN_FORM, obj}
 }
 
-export const loginCommit = () => {
-    return { type: LOGIN_COMMIT }
+export const loginCommit = (props) => {
+    return { type: LOGIN_COMMIT, props }
 }
 
 export const changeCode = () => {

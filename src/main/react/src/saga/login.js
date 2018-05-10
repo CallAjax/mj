@@ -9,7 +9,7 @@ import {
  * 登陆提交
  * @returns {IterableIterator<*>}
  */
-export function* login() {
+export function* login(action) {
     let obj = {}
     const login = yield select(v => v.get('login'))
     const params = {
@@ -48,7 +48,8 @@ export function* login() {
         const result = yield call(post, '/manage/login', qs.stringify(params))
         /**判断登陆结果**/
         if(result.data.resCode === 'SUCCESS') {//登陆成功
-
+            action.props.updateRoutes(result.auth)
+            action.props.history.replace('/home')
         } else {//登陆失败
             yield call(changeCode)//阻塞调用验证码刷新
             obj = getError(result.data.resMsg,{codeShow:''})

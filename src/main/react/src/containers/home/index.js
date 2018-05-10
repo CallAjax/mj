@@ -11,6 +11,7 @@ class Home extends Component {
 
 
     render() {
+        console.log(1111)
         return <h1>home</h1>
     }
 }

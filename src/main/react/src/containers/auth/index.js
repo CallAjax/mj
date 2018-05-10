@@ -26,7 +26,7 @@ class Routes extends Component {
             return (
                 <Switch>
                     {this.props.auth.get('routes').has('/login')?<Route path='/login' component={Login}/> : ''}
-                    {this.props.auth.get('routes').has('/home')?<Route path='/home' component={Home}/> : ''}
+                    {this.props.auth.get('routes').has('/home')?<Route path='/home' component={Home} auth={this.props.auth}/> : ''}
                 </Switch>
             )
         }
@@ -36,7 +36,6 @@ class Routes extends Component {
 const mapStateToProps = state => {
     return {
         auth: state.get('auth'),
-        login: state.get('login'),
     }
 }
 

@@ -6,7 +6,7 @@ import TextField from 'material-ui/TextField'
 import Button from 'material-ui/Button'
 import Icon from 'material-ui/Icon'
 import { connect } from 'react-redux'
-import { changeLoginForm, loginCommit, changeCode } from 'actions'
+import { changeLoginForm, loginCommit, changeCode, updateRoutes } from 'actions'
 import MessageShow from 'components/MessageShow'
 import { CircularProgress } from 'material-ui/Progress'
 
@@ -65,7 +65,7 @@ class Login extends Component {
     }
 
     onCommit() {
-        this.props.loginCommit()
+        this.props.loginCommit(this.props)
     }
 
     changeCode(e) {
@@ -149,6 +149,7 @@ class Login extends Component {
 
 const mapStateToProps = state => {
     return {
+        auth: state.get('auth'),
         login: state.get('login'),
     }
 }
@@ -158,6 +159,7 @@ const mapDispatchToProps = dispatch => {
         changeLoginForm: (...args) => dispatch(changeLoginForm(...args)),
         loginCommit: (...args) => dispatch(loginCommit(...args)),
         changeCode: (...args) => dispatch(changeCode(...args)),
+        updateRoutes: (...args) => dispatch(updateRoutes(...args)),
     }
 }
 
