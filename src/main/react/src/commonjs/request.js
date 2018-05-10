@@ -21,8 +21,12 @@ axios.interceptors.response.use(function (response) {
     if(response.data.status === null || response.data.status === undefined) {
         if(response.headers.hasOwnProperty('access_token')) {
             localforage.setItem('Authorization','Bearer ' + response.headers['access_token'])
-            localforage.setItem('routes',Immutable.fromJS(response.data['tokenInfo']['routes']))
-            localforage.setItem('menu',Immutable.fromJS(response.data['tokenInfo']['menu']))
+            const auth = {
+                'routes': response.data['tokenInfo']['routes'],
+                'menu': response.data['tokenInfo']['menu']
+            }
+            localforage.setItem('auth',auth)
+            response['auth'] = auth
         }
     } else {
         localforage.clear().then(() => window.location.replace('/'))

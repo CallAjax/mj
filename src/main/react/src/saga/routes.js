@@ -1,5 +1,5 @@
 import localforage from 'localforage'
-import Immutable from 'immutable'
+import Immutable, { is } from 'immutable'
 import { select, put,call } from 'redux-saga/effects'
 import { post } from 'commonjs/request'
 import {
@@ -15,11 +15,23 @@ export function* getRoutes(action) {
                 action.props.history.replace('/login')
             }
         } else {//需要验证本地信息
-            post('/auth/token').then(() => {
-                console.log(1111111)
+            localforage.getItem('auth').then(auth => {
+                post('/auth/token').then((t) => {
+                    let routes = {}
+                    if(t.auth !== undefined) {
+                        routes = Immutable.fromJS(t.auth.routes)
+                    } else {
+                        routes = Immutable.fromJS(auth.routes)
+                    }
+                    console.log(auth)
+                    action.props.updateRoutes(routes)
+                    action.props.history.replace('/home')
+                })
             })
+
         }
     })
+    return 'aaa'
 }
 
 

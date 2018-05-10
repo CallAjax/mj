@@ -4,8 +4,6 @@ import qs from 'qs'
 import {
     CHANGE_LOGIN_FORM,
 } from 'actionTypes'
-import localforage from 'localforage'
-import Immutable from 'immutable'
 
 /**
  * 登陆提交
@@ -48,7 +46,6 @@ export function* login() {
 
         yield put({type:CHANGE_LOGIN_FORM,obj})
         const result = yield call(post, '/manage/login', qs.stringify(params))
-
         /**判断登陆结果**/
         if(result.data.resCode === 'SUCCESS') {//登陆成功
 

@@ -25,10 +25,10 @@ class Routes extends Component {
             return <Loading />
         } else {
             return (
-                <div>
+                <Switch>
                     {this.props.routes.has('/login')?<Route path='/login' component={Login}/> : ''}
-                    {this.props.routes.has('/home')?<Route path='/login' component={Home}/> : ''}
-                </div>
+                    {this.props.routes.has('/home')?<Route path='/home' component={Home}/> : ''}
+                </Switch>
             )
         }
     }
