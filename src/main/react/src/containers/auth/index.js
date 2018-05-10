@@ -1,5 +1,5 @@
 import React,{Component} from 'react'
-import { BrowserRouter, Route, Switch, Redirect } from 'react-router-dom'
+import { Route, Switch, Redirect } from 'react-router-dom'
 import { connect } from 'react-redux'
 import Loading from 'components/Loading'
 import { getRoutes, updateRoutes } from 'actions'
@@ -20,6 +20,7 @@ class Routes extends Component {
     }
 
     render() {
+        console.log(this.props.auth.get('routes').size)
         if(this.props.auth.get('routes').size === 0) {
             return <Loading />
         } else {

@@ -1,6 +1,4 @@
 import localforage from 'localforage'
-import Immutable, { is } from 'immutable'
-import { select, put,call } from 'redux-saga/effects'
 import { post } from 'commonjs/request'
 import {
     UPDATE_ROUTES,
