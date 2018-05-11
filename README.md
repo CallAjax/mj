@@ -12,7 +12,7 @@ router：页面路由。<br>
 saga：抽离业务逻辑，异步处理任务。<br>
 axios：ajax通信。<br>
 immutable：数据不可变特点，适合store中的复杂对象更新。<br>
-localforage：本地存储的封装，特点是异步处理以及支持各种数据格式。<br>
+store:本地存储封装。<br>
 
 
 ###### 后端
