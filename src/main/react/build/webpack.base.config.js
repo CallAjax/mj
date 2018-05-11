@@ -96,7 +96,7 @@ module.exports = config = {
             miniChunks: 2,
         }),
         new copyWebpackPlugin([{
-            from: path.resolve(__dirname, '../src/static'),
+            from: path.resolve(__dirname, '../src/resource'),
             to: path.resolve(__dirname,'../../resources/static')
         }]),
     ],
