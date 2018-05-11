@@ -1,33 +1,30 @@
-import localforage from 'localforage'
+import store from 'store'
 import { post } from 'commonjs/request'
 import {
     UPDATE_ROUTES,
 } from 'actionTypes'
 
 export function* getRoutes(action) {
-    localforage.getItem('Authorization').then(v => {
-        if (v === null) {//没有本地信息
-            const obj = {'/login': {}}
-            action.props.updateRoutes(obj, 'routes')
-            if (action.props.location.pathname !== '/login') {
-                action.props.history.replace('/login')
-            }
-        } else {//需要验证本地信息
-            localforage.getItem('auth').then(auth => {
-                post('/auth/token').then((t) => {
-                    if(t.auth !== undefined) {
-                        action.props.updateRoutes(t.auth)
-                    } else {
-                        action.props.updateRoutes(auth)
-                    }
-                    if(action.props.location.pathname === '/login' || action.props.location.pathname === '/') {
-                        action.props.history.replace('/home')
-                    }
-                })
-            })
-
+    const url = action.props.location.pathname
+    const auth = store.get('auth')
+    if(auth === undefined) {
+        const obj = {'/login': {}}
+        action.props.updateRoutes(obj, 'routes')
+        if (url !== '/login' && url !== '/error') {
+            action.props.history.replace('/login')
         }
-    })
+    } else {//需要验证本地信息
+        post('/auth/token').then((res) => {
+            if(res.auth !== undefined) {
+                action.props.updateRoutes(res.auth)
+            } else {
+                action.props.updateRoutes(auth)
+            }
+            if(!action.props.auth.get('routes').has(url)) {
+                action.props.history.push('/home')
+            }
+        })
+    }
 }
 
 

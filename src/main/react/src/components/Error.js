@@ -1,7 +1,7 @@
 import React from 'react'
 
 
-const Error = props => {
+const Error = () => {
     return (
        <h1>404</h1>
     )

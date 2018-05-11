@@ -5,8 +5,9 @@ import Loading from 'components/Loading'
 import { getRoutes, updateRoutes } from 'actions'
 import Login from 'containers/login'
 import Home from 'containers/home'
+import refresh from 'commonjs/refresh'
 
-
+@refresh(['auth'])
 class Routes extends Component {
     constructor(props, context) {
         super(props, context)
@@ -25,8 +26,8 @@ class Routes extends Component {
         } else {
             return (
                 <Switch>
-                    {this.props.auth.get('routes').has('/login')?<Route path='/login' component={Login}/> : ''}
-                    {this.props.auth.get('routes').has('/home')?<Route path='/home' component={Home} auth={this.props.auth}/> : ''}
+                    {this.props.auth.get('routes').has('/login')?<Route exact path='/login' component={Login}/> : ''}
+                    {this.props.auth.get('routes').has('/home')?<Route exact path='/home' component={Home}/> : ''}
                 </Switch>
             )
         }
