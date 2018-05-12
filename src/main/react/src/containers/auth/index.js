@@ -26,6 +26,7 @@ class Routes extends Component {
         } else {
             return (
                 <Switch>
+                    <Route exact path='/' component={Loading}/>
                     {this.props.auth.get('routes').has('/login')?<Route exact path='/login' component={Login}/> : ''}
                     {this.props.auth.get('routes').has('/home')?<Route exact path='/home' component={Home}/> : ''}
                     <Route render={() => <Redirect to="/error"/>} />
