@@ -10,7 +10,7 @@ export function* getRoutes(action) {
     if(auth === undefined) {
         const obj = {'/login': {}}
         action.props.updateRoutes(obj, 'routes')
-        if (url !== '/login' && url !== '/error') {
+        if (url !== '/login') {
             action.props.history.replace('/login')
         }
     } else {//需要验证本地信息
@@ -21,7 +21,7 @@ export function* getRoutes(action) {
                 action.props.updateRoutes(auth)
             }
             if(url === '/' || url === '/login') {
-                action.props.history.push('/home')
+                action.props.history.replace('/home')
             }
         })
     }
